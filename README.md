@@ -20,7 +20,7 @@
 - ### Component oriented (by compiled library).
 
 ## Dependencies:
-- ### Look for [Binary Mono](https://github.com/cenez/HPC/tree/main/langs/csharp) environment to RUN MPI/CSharp software on Linux.
+- ### Look for [Binary Mono](https://github.com/UFC-Jaguar/prototypes/tree/main/environment_install) environment to RUN MPI/CSharp software on Linux.
 
 ## Basic scheme:
 <p align="center">
