@@ -17,6 +17,10 @@ mkdir -p /opt/MPI
 sudo cp /etc/hosts /etc/hosts.bkp
 sudo cp hosts /etc/hosts
 
+echo "****************************************** ATENÇÃO *******************************************"
+echo "##############################################################################################"
+echo "################# Voce deve montar o compartilhamento samba em /opt/MPI ######################"
+echo "##############################################################################################"
 echo "seja, 'n0' o nome do master, onde há o samba e a pasta MPI compartilhada, faça:"
 echo "   Antes de executar ./cluster_worker.sh, faça:"
 echo "   |> ./samba_mount.sh # e digite:"
