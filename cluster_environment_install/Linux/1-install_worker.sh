@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo chown $USER:$USER /opt
-mkdir -p /opt/MPI
 
 ################ Instalacoes Básicas ###############################
 sudo apt install git vim -y
@@ -12,6 +10,12 @@ sudo apt install rar unrar p7zip-full p7zip-rar -y
 sudo apt-get install build-essential cmake cmake-data autoconf automake pkg-config libtool libzip-dev libxml2-dev libglvnd-dev -y
 sudo apt install nasm make gcc g++ gfortran -y
 ####################################################################
+
+sudo chown $USER:$USER /opt
+mkdir -p /opt/MPI
+
+sudo cp /etc/hosts /etc/hosts.bkp
+sudo cp hosts /etc/hosts
 
 echo "seja, 'n0' o nome do master, onde há o samba e a pasta MPI compartilhada, faça:"
 echo "   Antes de executar ./cluster_worker.sh, faça:"

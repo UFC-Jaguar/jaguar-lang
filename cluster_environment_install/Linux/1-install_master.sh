@@ -17,4 +17,6 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf-org
 sudo cp smb.conf /etc/samba/
 sudo service smbd start
 
+sudo cp /etc/hosts /etc/hosts.bkp
+sudo cp hosts /etc/hosts
 
