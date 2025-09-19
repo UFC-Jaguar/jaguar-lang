@@ -17,9 +17,12 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf-org
 sudo cp smb.conf /etc/samba/
 sudo service smbd start
 
-sudo cp /etc/hosts /etc/hosts.bkp
-sudo cp hosts /etc/hosts
 
+existe=$(ls /etc/hosts.bkp)
+if ! [ "$existe" == "/etc/hosts.bkp" ]; then
+	sudo cp /etc/hosts /etc/hosts.bkp
+fi
+sudo cp hosts /etc/hosts
 
 echo "****************************************** ATENÇÃO *******************************************"
 echo "##############################################################################################"

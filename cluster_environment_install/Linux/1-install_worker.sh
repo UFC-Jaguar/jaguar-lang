@@ -14,7 +14,10 @@ sudo apt install nasm make gcc g++ gfortran -y
 sudo chown $USER:$USER /opt
 mkdir -p /opt/MPI
 
-sudo cp /etc/hosts /etc/hosts.bkp
+existe=$(ls /etc/hosts.bkp)
+if ! [ "$existe" == "/etc/hosts.bkp" ]; then
+	sudo cp /etc/hosts /etc/hosts.bkp
+fi
 sudo cp hosts /etc/hosts
 
 echo "" ; echo "" ; echo "" ; echo ""
@@ -34,3 +37,8 @@ echo "  sudo mount -t cifs -o uid=$UID,gid=$UID,username=$USER,password=SuaSenha
 echo "*** OBS **:"
 echo "   Após isso, sua pasta compartilhada com o master será: /opt/MPI"
 echo "   Digitar 'df' para verificar se está montada. Caso sim, será listada."
+
+echo "Para testar ssh (entrar sem senha), em cada node master e worker, digitar:"
+echo "ssh n0"
+echo "ssh n1"
+echo "(....)"
