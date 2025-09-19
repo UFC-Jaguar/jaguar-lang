@@ -17,7 +17,7 @@ mkdir -p /opt/MPI
 sudo cp /etc/hosts /etc/hosts.bkp
 sudo cp hosts /etc/hosts
 
-echo "\n \n \n "
+echo "" ; echo "" ; echo "" ; echo ""
 echo "****************************************** ATENÇÃO *******************************************"
 echo "##############################################################################################"
 echo "################# Voce deve montar o compartilhamento samba em /opt/MPI ######################"
