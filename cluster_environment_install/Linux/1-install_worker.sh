@@ -30,7 +30,6 @@ echo "   >> SuaSenha"
 
 echo "OU digite:"
 echo "  sudo mount -t cifs -o uid=$UID,gid=$UID,username=$USER,password=SuaSenha //n0/MPI /opt/MPI"
-echo "para montar a pasta remota com o server master."
-
-echo "Após isso, sua pasta compartilhada com o master será: /opt/MPI"
-echo "Digitar 'df' para verificar se está montada. Caso sim, será listada."
+echo "*** OBS **:"
+echo "   Após isso, sua pasta compartilhada com o master será: /opt/MPI"
+echo "   Digitar 'df' para verificar se está montada. Caso sim, será listada."
