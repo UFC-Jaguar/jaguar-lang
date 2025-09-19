@@ -22,7 +22,7 @@ echo "##########################################################################
 echo "################# Voce deve montar o compartilhamento samba em /opt/MPI ######################"
 echo "##############################################################################################"
 echo "seja, 'n0' o nome do master, onde há o samba e a pasta MPI compartilhada, faça:"
-echo "   Antes de executar ./cluster_worker.sh, faça:"
+echo "   Antes de executar ./2-cluster_worker.sh, faça:"
 echo "   |> ./samba_mount.sh # e digite:"
 echo "   |> //n0/MPI"
 echo "   |> $USER"
