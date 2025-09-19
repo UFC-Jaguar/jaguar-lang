@@ -1,0 +1,11 @@
+Baixar, em: https://www.microsoft.com/en-us/download/details.aspx?id=105289
+Os seguintes arquivos:
+  msmpisetup.exe
+  msmpisdk.msi
+
+Instale-os.
+Para rodar uma aplicação MPI, usar em linha de comando a chamada da aplicação MPI. 
+Exemplo para 4 processos MPI, rodando "Aplicacao.exe":
+  mpiexec -n 4 .\Aplicacao.exe
+
+
