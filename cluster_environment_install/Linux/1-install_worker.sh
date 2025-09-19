@@ -23,12 +23,14 @@ echo "################# Voce deve montar o compartilhamento samba em /opt/MPI ##
 echo "##############################################################################################"
 echo "seja, 'n0' o nome do master, onde há o samba e a pasta MPI compartilhada, faça:"
 echo "   Antes de executar ./2-cluster_worker.sh, faça:"
-echo "   |> ./samba_mount.sh # e digite:"
-echo "   |> //n0/MPI"
-echo "   |> $USER"
-echo "   |> SuaSenha"
+echo "   >> ./samba_mount.sh # e digite:"
+echo "   >> //n0/MPI"
+echo "   >> $USER"
+echo "   >> SuaSenha"
 
 echo "OU digite:"
 echo "  sudo mount -t cifs -o uid=$UID,gid=$UID,username=$USER,password=SuaSenha //n0/MPI /opt/MPI"
 echo "para montar a pasta remota com o server master."
 
+echo "Após isso, sua pasta compartilhada com o master será: /opt/MPI"
+echo "Digitar 'df' para verificar se está montada. Caso sim, será listada."
