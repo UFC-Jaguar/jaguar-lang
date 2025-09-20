@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B7FB1849-46D8-4BC9-8A80-16710CFE1118}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Jaguar</RootNamespace>
+    <AssemblyName>Jaguar</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MPI">
+      <HintPath>..\Lib\MPI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppMain.cs" />
+    <Compile Include="Common\Data\TFun.cs" />
+    <Compile Include="Common\Data\TFunction.cs" />
+    <Compile Include="BackEnd\Interpreter.cs" />
+    <Compile Include="Common\Environment\MPIEnv.cs" />
+    <Compile Include="Common\Environment\PRunner.cs" />
+    <Compile Include="Common\Environment\Runner.cs" />
+    <Compile Include="Common\Environment\SRunner.cs" />
+    <Compile Include="Common\VisitorNodes\NoFuncFun.cs" />
+    <Compile Include="Common\VisitorNodes\NoPAtomCall.cs" />
+    <Compile Include="Common\VisitorNodes\Visitor.cs" />
+    <Compile Include="Common\Data\TBaseFunction.cs" />
+    <Compile Include="Common\Data\TEmbeddedFunction.cs" />
+    <Compile Include="Common\Data\Consts.cs" />
+    <Compile Include="Common\Data\JMemory.cs" />
+    <Compile Include="Common\Data\TList.cs" />
+    <Compile Include="Common\Data\Node.cs" />
+    <Compile Include="Common\Data\TNumber.cs" />
+    <Compile Include="Common\Data\JSource.cs" />
+    <Compile Include="Common\Data\MemoryManager.cs" />
+    <Compile Include="Common\Data\TString.cs" />
+    <Compile Include="Common\Data\JSymbolTable.cs" />
+    <Compile Include="Common\Data\TValue.cs" />
+    <Compile Include="Common\Errors\TError.cs" />
+    <Compile Include="Common\Errors\TRunTimeError.cs" />
+    <Compile Include="Common\Helpers\ConsoleTest1.cs" />
+    <Compile Include="Common\Helpers\ConsoleTest2.cs" />
+    <Compile Include="Common\Helpers\Running.cs" />
+    <Compile Include="Common\Helpers\Util.cs" />
+    <Compile Include="FrontEnd\Grammar\ArithExp.cs" />
+    <Compile Include="FrontEnd\Grammar\Atom.cs" />
+    <Compile Include="FrontEnd\Grammar\AtomCall.cs" />
+    <Compile Include="FrontEnd\Grammar\FuncFun.cs" />
+    <Compile Include="FrontEnd\Grammar\LogicExp.cs" />
+    <Compile Include="FrontEnd\Grammar\Exp.cs" />
+    <Compile Include="FrontEnd\Grammar\Factor.cs" />
+    <Compile Include="FrontEnd\Grammar\ForExp.cs" />
+    <Compile Include="FrontEnd\Grammar\FuncDef.cs" />
+    <Compile Include="FrontEnd\Grammar\IfExp.cs" />
+    <Compile Include="FrontEnd\Grammar\Grammar.cs" />
+    <Compile Include="FrontEnd\Grammar\ListExp.cs" />
+    <Compile Include="FrontEnd\Grammar\PAtomCall.cs" />
+    <Compile Include="FrontEnd\Grammar\Pow.cs" />
+    <Compile Include="FrontEnd\Grammar\Statements.cs" />
+    <Compile Include="FrontEnd\Grammar\Stm.cs" />
+    <Compile Include="FrontEnd\Grammar\Term.cs" />
+    <Compile Include="FrontEnd\Grammar\WhileExp.cs" />
+    <Compile Include="FrontEnd\Lexing\Lexer.cs" />
+    <Compile Include="FrontEnd\Lexing\LexerTokens.cs" />
+    <Compile Include="Common\VisitorNodes\NoOpBinaria.cs" />
+    <Compile Include="Common\VisitorNodes\NoBreak.cs" />
+    <Compile Include="Common\VisitorNodes\NoAtomCall.cs" />
+    <Compile Include="Common\VisitorNodes\NoContinue.cs" />
+    <Compile Include="Common\VisitorNodes\NoFOR.cs" />
+    <Compile Include="Common\VisitorNodes\NoFuncDef.cs" />
+    <Compile Include="Common\VisitorNodes\NoIF.cs" />
+    <Compile Include="Common\VisitorNodes\NoList.cs" />
+    <Compile Include="Common\VisitorNodes\NoNumber.cs" />
+    <Compile Include="Common\VisitorNodes\NoReturn.cs" />
+    <Compile Include="Common\VisitorNodes\NoString.cs" />
+    <Compile Include="FrontEnd\Lexing\Token.cs" />
+    <Compile Include="Common\VisitorNodes\NoOpUnaria.cs" />
+    <Compile Include="Common\VisitorNodes\NoVarAccess.cs" />
+    <Compile Include="Common\VisitorNodes\NoVarAssign.cs" />
+    <Compile Include="Common\VisitorNodes\NoWhile.cs" />
+    <Compile Include="FrontEnd\Parsing\Parser.cs" />
+    <Compile Include="FrontEnd\Parsing\AstInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,102 @@
+﻿### READ-ME ###
+### KEY:X, define X "value" as reserved word
+### include("file_name.jg"), run expressions from "file_name.jg"
+
+### TODO ###:
+# <Program>       ::= NEWLINE* <Includes> <Statements>
+# <Includes>      ::= {KEY:INCLUDE LPAR ID DOT EXTENSION RPAR [NEWLINE*]}
+###############
+
+<Statements>    ::= {NEWLINE} <Stm> {{NEWLINE}+ <Stm>} {NEWLINE}
+<Stm>           ::= KEY:RETURN [<Exp>]
+                ::= KEY:CONTINUE
+                ::= KEY:BREAK
+                ::= <Exp>
+<Exp>           ::= [KEY:LET] ID EQ <Exp>
+                ::= <LogicExp> {(KEY:AND|KEY:OR) <LogicExp>}
+<LogicExp>      ::= NOT <LogicExp>
+                ::= <ArithExp> {(EE|LT|GT|LTE|GTE) <ArithExp>}
+<ArithExp>      ::= <Term> {(PLUS|MINUS) <Term>}
+<Term>          ::= <Factor> {(MUL|DIV) <Factor>}
+<Factor>        ::= (PLUS|MINUS) <Factor>
+                ::= <Pow>
+<Pow>           ::= <AtomCall> {POW <Factor>}
+<AtomCall>      ::= <Atom> [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]   |   <PAtomCall>
+
+#TODO: Parallel Resources. This feature not defined yet, but the functions below run like a test.
+<PAtomCall>     ::= KEY:PFUN DOT <ParallelFun>
+<ParallelFun>   ::= (sum  | scatter) [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]
+
+<Atom>          ::= INT|FLOAT|STRING|ID|<TupleExp>|
+                    <SetExp>|LPAR <Exp> RPAR|<ListExp>|
+                    <IfExp>|<ForExp>|<WhileExp>|
+                    <FuncDef> | <FuncFun>
+<ListExp>       ::= LSQR  [  <Exp> {COMMA <Exp>}  ]  RSQR
+
+## TODO:
+<TupleExp>      ::= LVBAR   [ <Exp> {COMMA <Exp>}               ]  RVBAR
+<SetExp>        ::= LBRACE [ <Exp> <SetType>  ] RBRACE
+<SetType>       ::= ( COLON <Exp> {COMMA <Exp> COLON <Exp>}  # Dic
+                      |  {COMMA <Exp>}  # Set
+                    )
+
+
+# Note que, para if/elif/else, temos duas opções abaixo: inline e NEWLINE. Poderíamos melhorar? Ou deixar tudo com mesma regra?
+<IfExp> ::= KEY:IF <Exp> KEY:DO (<Stm> [(<Elif> | <Else>)]
+                                   | NEWLINE <Statements> (KEY:END | <Elif> | <Else>)
+                                )
+<Elif>  ::= KEY:ELIF <Exp> KEY:DO (<Stm> [(<Elif> | <Else>)]
+                                     | NEWLINE <Statements> (KEY:END | <Elif> | <Else>)
+                                  )
+<Else>  ::= KEY:ELSE (<Stm>
+                        | (NEWLINE <Statements> KEY:END)
+                     )
+
+<ForExp>        ::= KEY:FOR ID EQ <Exp> KEY:TO <Exp>  [KEY:STEP <Exp>] KEY:DO  <Stm>   |  (NEWLINE <Statements> KEY:END)
+<WhileExp>      ::= KEY:WHILE <Exp> KEY:DO  <Stm>  |  (NEWLINE <Statements> KEY:END)
+<FuncDef>       ::= KEY:DEF [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> KEY:END) )
+<FuncFun>       ::= KEY:FUN [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> KEY:END) )
+
+where,
+    {x} ------------------------ x repeat zero or more times, no choice
+    {x}+ ----------------------- x repeat one or more times, no choice
+    (x)* ----------------------- same that {x}
+    (x)+ ----------------------- same that {x}+
+    (u | v) -------------------- a choice between u or v. So, it's also accept * or +
+    [x] ------------------------ x it's optional
+    <variable_not_terminal> ---- it's a variable in the grammar.
+    INT ------------------------ it's any integer. The language consider a type TNum.
+    FLOAT ---------------------- it's any float. The language also consider a type TNum.
+    ID ------------------------- it's any identifier.
+    PLUS ----------------------- it's +
+    MINUS ---------------------- it's -
+    MUL ------------------------ it's *
+    DIV ------------------------ it's /
+    LPAR, RPAR ----------------- Respectively: (, )
+    LBRACE, RBRACE ------------- Respectively: {, }
+    LSQR, RSQR ----------------- Respectively: [, ]
+    EQ, EE, LT, GT, LTE, GTE --- Respectively: =, ==, <, >, <=, >=
+    NOT ------------------------ it's not
+    POW ------------------------ it's ^
+    COLON ---------------------- it's :
+    COMMA ---------------------- it's ,
+    NEWLINE -------------------- A newline '\n'
+    ARROW ---------------------- it's a symbol like ->
+    ############################################################
+    KEYWORDS BELOW ARE RESERVED WORD:
+    KEY:RETURN    -------------- it's reserved word return
+    KEY:CONTINUE  -------------- it's reserved word continue
+    KEY:BREAK     -------------- it's reserved word break
+    KEY:PFUN      -------------- it's reserved word ||
+    KEY:INCLUDE   -------------- it's reserved word include
+    KEY:FOR       -------------- it's reserved word for
+    KEY:WHILE     -------------- it's reserved word while
+    KEY:DEF       -------------- it's reserved word def
+    KEY:TO        -------------- it's reserved word to
+    KEY:DO        -------------- it's reserved word do
+    KEY:STEP      -------------- it's reserved word step
+    KEY:END       -------------- it's reserved word end
+    KEY:OR        -------------- it's reserved word or
+    KEY:AND       -------------- it's reserved word and
+    KEY:LET       -------------- it's reserved word let
+
