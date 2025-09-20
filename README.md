@@ -20,7 +20,7 @@
 - ### Component oriented (by compiled library).
 
 ## Dependencies:
-- ### Look for [Binary Mono](https://github.com/UFC-Jaguar/prototypes/tree/main/environment_install) environment to RUN MPI/CSharp software on Linux.
+- ### Look for [Binary Mono](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install) environment to RUN MPI/CSharp software on Linux.
 
 ## Basic scheme:
 <p align="center">
