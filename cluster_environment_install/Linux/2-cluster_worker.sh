@@ -14,3 +14,9 @@ ssh-copy-id $user@$host
 
 cd $mydir
 
+echo "################################## Atenção ###############################"
+echo "Para completar e testar o ssh sem senha, em cada node master e worker, digitar:"
+echo "ssh n0"
+echo "ssh n1"
+echo "(....)"
+

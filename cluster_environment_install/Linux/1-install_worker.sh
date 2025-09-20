@@ -38,7 +38,3 @@ echo "*** OBS **:"
 echo "   Após isso, sua pasta compartilhada com o master será: /opt/MPI"
 echo "   Digitar 'df' para verificar se está montada. Caso sim, será listada."
 
-echo "Para testar ssh (entrar sem senha), em cada node master e worker, digitar:"
-echo "ssh n0"
-echo "ssh n1"
-echo "(....)"
