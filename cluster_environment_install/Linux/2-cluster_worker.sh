@@ -20,3 +20,4 @@ echo "ssh n0"
 echo "ssh n1"
 echo "(....)"
 
+echo "responda 'yes' às perguntas!!"
