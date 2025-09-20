@@ -26,9 +26,9 @@
 5. Create the workspace:
      *      mkdir /opt/workspace
      *      cd /opt/workspace
-6. Clone the git HPC Projects:
-     *      git clone https://github.com/UFC-Jaguar/prototypes
-     *      cd prototypes/environment_install/AulaMPI2
+6. Clone the git Project:
+     *      git clone https://github.com/UFC-Jaguar/jaguar-lang
+     *      cd jaguar-lang/Cluster_environment_install/AulaMPI2
 7. Compile the sources:
      *      ./compile.sh
 8. To Run (4 process):
