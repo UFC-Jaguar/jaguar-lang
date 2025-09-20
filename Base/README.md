@@ -1,7 +1,7 @@
 # 🚀 About and History
 ## This repository include a parallel version of **UFC-Lang** Project (programming language). The parallel version is named "Jaguar".
 <p align="center">
-  <img src="./jaguar-lang/img/img_b_300.jpeg" style="width:128px" alt="Jaguar" title="Jaguar">
+  <img src="./img/img_b_300.jpeg" style="width:128px" alt="Jaguar" title="Jaguar">
 </p>
 
 ## **Jaguar** is a project of general-purpose language, where the resources aims to:
@@ -24,15 +24,15 @@
 
 ## Basic scheme:
 <p align="center">
-  <img src="./jaguar-lang/img/DiagramaClasse.png" alt="Class Diagram" width="650">
+  <img src="./img/DiagramaClasse.png" alt="Class Diagram" width="650">
 </p>
 
 ## Serial interative Repl example:
 <p align="center">
-  <img src="./jaguar-lang/img/Ex1.png" alt="Class Diagram" width="400">
+  <img src="./img/Ex1.png" alt="Class Diagram" width="400">
 </p>
 
 ## Parallell interative Repl example:
 <p align="center">
-  <img src="./jaguar-lang/img/Ex2.png" alt="Class Diagram" width="400">
+  <img src="./img/Ex2.png" alt="Class Diagram" width="400">
 </p>
