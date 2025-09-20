@@ -4,6 +4,8 @@
   <img src="./img/img_b_300.jpeg" style="width:128px" alt="Jaguar" title="Jaguar">
 </p>
 
+# 🚀 A base do projeto **Jaguar** fica em:
+1. #### [Base](https://github.com/UFC-Jaguar/jaguar-lang/Base)
 ## **Jaguar** is a project of general-purpose language, where the resources aims to:
 1. #### Parallel programming;
 2. #### Teory of graphs suport;
