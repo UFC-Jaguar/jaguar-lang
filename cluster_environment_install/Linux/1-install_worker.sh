@@ -18,7 +18,7 @@ existe=$(ls /etc/hosts.bkp)
 if ! [ "$existe" == "/etc/hosts.bkp" ]; then
 	sudo cp /etc/hosts /etc/hosts.bkp
 fi
-sudo cp hosts /etc/hosts
+sudo cp 0-hosts /etc/hosts
 
 echo "" ; echo "" ; echo "" ; echo ""
 echo "****************************************** ATENÇÃO *******************************************"
