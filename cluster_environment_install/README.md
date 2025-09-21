@@ -4,7 +4,7 @@
 ### Enviromment MPI and MONO on Linux:
 1. Require the compiled mono_mpi_environment.tar.gz (in the group), or download/compile a tested version of [mpich2-1.5rc3](https://www.mpich.org/static/downloads/1.5rc3/mpich2-1.5rc3.tar.gz) and [mono-6.12.0.90](https://github.com/mono/mono/archive/refs/tags/mono-6.12.0.90.tar.gz).
 2. Case download/compile, make this instruction 2. Caso no, go to next instruction (3).
-     * For compatibilty with this tutorial, set folder like "/opt/mono-6.12.0.90" and "/opt/mpich2-1.5rc3";
+     * For compatibilty with this tutorial, set compiled folder like "/opt/mono-6.12.0.90" and "/opt/mpich2-1.5rc3";
      * Include on ~/.bashrc (end of file) the follow content:
 <pre><code>######################## Mono and MPICH Install ###############################
 #*********************************** MONO ***********************************
