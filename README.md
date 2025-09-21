@@ -9,7 +9,7 @@
 1. #### Otmizations;
 2. #### Best machine codes;
 3. #### Good practices of programming.
-## Jaguar version is building by project members, because it's a institucional research project, started in [ufc cadproj](https://cadproj.ufc.br/projects/592). But all people can contributed. For that, use the email informed here (end line page).
+## Jaguar version is building by project members. It's a institucional research project, started in [ufc cadproj](https://cadproj.ufc.br/projects/592), but all people can contributed (become a member). For that, use the email informed in end of page.
 # 📃 Features
 ## The **main features** target of jaguar are:
 - ### Multi-paradigm: functional, imperative, concurrent, parallel and distributed, process-oriented;
