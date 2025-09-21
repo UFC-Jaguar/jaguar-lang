@@ -16,12 +16,12 @@
 - ### Typing discipline: dynamic, duck, weak typing;
 - ### Component oriented (by compiled library).
 
-# 🚀 Técnico e/ou Dependências:
-## A base do projeto **Jaguar** fica em:
-1. #### [Base CSharp](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/Base);
-2. #### [Configuração de ambiente MONO/MPI em Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install);
-3. #### [Configuração de ambiente Windows MPI](https://github.com/UFC-Jaguar/jaguar-lang/blob/main/cluster_environment_install/Windows/Instrucoes.txt);
-4. #### [Configuração de um Cluster HPC Simulado](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
+# 🚀 Technical description and/or dependencies:
+## The project base **Jaguar** is found on:
+1. #### [CSharp Base](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/Base);
+2. #### [MONO/MPI environment config on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install);
+3. #### [MPI environment config on Windows](https://github.com/UFC-Jaguar/jaguar-lang/blob/main/cluster_environment_install/Windows/Instrucoes.txt);
+4. #### [Config a HPC Cluster](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
 
 ## Basic scheme:
 <p align="center">
