@@ -21,7 +21,7 @@
 ## Dependencies MPI for Run Parallel Environment:
 1. #### [MPI environment config on Windows](https://github.com/UFC-Jaguar/jaguar-lang/blob/main/cluster_environment_install/Windows/Instrucoes.txt);
 2. #### [MONO/MPI environment config on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install);
-3. #### [Config a HPC Cluster](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
+3. #### [Config a HPC Cluster on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
 
 ## Basic scheme:
 <p align="center">
