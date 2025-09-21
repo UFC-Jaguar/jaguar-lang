@@ -25,3 +25,4 @@
      * ...
      *      ssh ni
 4. On Master, git clone the projet on "/opt/MPI". This folder is common on Master and Workers, shared by samba service.
+     * NOTE: Before run, you are need remember that [Mono/MPI](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install) is used.
