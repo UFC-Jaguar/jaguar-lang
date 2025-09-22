@@ -52,6 +52,7 @@ export LD_LIBRARY_PATH=${MPI_HOME}/lib:$LD_LIBRARY_PATH
      *      git clone https://github.com/UFC-Jaguar/jaguar-lang
      *      cd jaguar-lang/cluster_environment_install/AulaMPI2
 9. Compile the sources:
+     *      chmod +x compile.sh
      *      ./compile.sh
 10. To Run (4 process):
      *      cd bin/
