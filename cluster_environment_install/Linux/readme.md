@@ -28,3 +28,8 @@
      *      cd /opt/MPI
      *      git clone https://github.com/UFC-Jaguar/jaguar-lang
      * NOTE: Before run, you are need remember that [Mono/MPI](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install) is used.
+     *      cd jaguar-lang/Base/
+     *      xbuild Jaguar.sln
+     *      cd bin/
+     *      mpiexec -n 4 mono ./Jaguar.exe
+
