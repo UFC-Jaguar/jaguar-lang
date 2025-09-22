@@ -21,6 +21,26 @@
 1. #### [MPI environment config on Windows](https://github.com/UFC-Jaguar/jaguar-lang/blob/main/cluster_environment_install/Windows/Instrucoes.txt);
 2. #### [MONO/MPI environment config on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install);
 3. #### [Config a HPC Cluster on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
+4. A basic running schema:
+     *      sudo mkdir -p /opt/MPI
+     *      sudo chown $USER:$GROUPS /opt/MPI
+     *      cd /opt/MPI
+     *      git clone https://github.com/UFC-Jaguar/jaguar-lang
+     * NOTE: Before run, you are need remember that [Mono/MPI](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install) is used.
+     *      cd jaguar-lang/Base/
+     *      xbuild Jaguar.sln
+     *      cd bin/
+     *      mpiexec -n 4 mono ./Jaguar.exe
+     * NOTE: Running a sample cluster, with "/opt/MPI"  folder common among master and workers:
+     *      vi /opt/MPI/mpi_hosts # Insert on /opt/MPI/mpi_hosts the follow content:
+<pre><code>n0:1
+n1:1</code></pre>
+     *      cd /opt/MPI
+     *      git clone https://github.com/UFC-Jaguar/jaguar-lang
+     *      cd jaguar-lang/Base/
+     *      xbuild Jaguar.sln
+     *      cd bin/
+     *      mpiexec -n 4 -f /opt/MPI/mpi_hosts mono ./Jaguar.exe
 
 ## Basic scheme:
 <p align="center">
