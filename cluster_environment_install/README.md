@@ -21,7 +21,8 @@ export MPI_HOME=/opt/mpich2-1.5rc3
 export PATH=${MPI_HOME}/bin:${PATH}
 export LD_LIBRARY_PATH=${MPI_HOME}/lib:$LD_LIBRARY_PATH
 ####################### END: Mono and MPICH Install ############################</code></pre>
-     * Vá para a Seção 8.
+- Go to **Section number 7**.
+
 3. Case mono_mpi_environment.tar.gz, make:
      - 1.1 Dependencies: You need install: libxml2-dev and git
      - 1.1.1 Ex: Ubuntu or Debian: 
