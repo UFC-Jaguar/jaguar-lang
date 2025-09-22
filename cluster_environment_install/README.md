@@ -45,8 +45,9 @@ export LD_LIBRARY_PATH=${MPI_HOME}/lib:$LD_LIBRARY_PATH
      - 4.3 Test your enviromment:
      *      mpiexec -n 4 /bin/hostname
 7. Create the workspace:
-     *      mkdir /opt/workspace
-     *      cd /opt/workspace
+     *      mkdir -p /opt/MPI
+     *      sudo chown $USER:$GROUPS /opt/MPI
+     *      cd /opt/MPI
 8. Clone the git Project:
      *      git clone https://github.com/UFC-Jaguar/jaguar-lang
      *      cd jaguar-lang/Cluster_environment_install/AulaMPI2
