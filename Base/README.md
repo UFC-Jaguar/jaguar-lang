@@ -21,7 +21,7 @@
 ### 1. [MPI environment config on Windows](https://github.com/UFC-Jaguar/jaguar-lang/blob/main/cluster_environment_install/Windows/Instrucoes.txt);
 ### 2. [MONO/MPI environment config on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install);
 ### 3. [Config a HPC Cluster on Linux](https://github.com/UFC-Jaguar/jaguar-lang/tree/main/cluster_environment_install/Linux)
-### 4. A basic running schema:
+### 4. A basic running schema on Linux:
 #### 4.1 **NOTE: Running MPI local**:
 <pre><code>sudo mkdir -p /opt/MPI</code></pre>
 <pre><code>sudo chown $USER:$GROUPS /opt/MPI</code></pre>
