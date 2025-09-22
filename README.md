@@ -11,7 +11,7 @@
 3. #### Good practices of programming.
 ## Jaguar version is building by project members. It's a institucional research project, started in [ufc cadproj](https://cadproj.ufc.br/projects/592), but all people can contributed (become a member). For that, use the email informed in end of page.
 # 📃 Features
-## The **main features** target of jaguar are:
+## The **main** Jaguar **features** (target) are:
 - ### Multi-paradigm: functional, imperative, concurrent, parallel and distributed, process-oriented;
 - ### Typing discipline: dynamic, duck, weak typing;
 - ### Component oriented (by compiled library).
