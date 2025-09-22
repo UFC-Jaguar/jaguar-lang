@@ -50,7 +50,7 @@ export LD_LIBRARY_PATH=${MPI_HOME}/lib:$LD_LIBRARY_PATH
      *      cd /opt/MPI
 8. Clone the git Project:
      *      git clone https://github.com/UFC-Jaguar/jaguar-lang
-     *      cd jaguar-lang/Cluster_environment_install/AulaMPI2
+     *      cd jaguar-lang/cluster_environment_install/AulaMPI2
 9. Compile the sources:
      *      ./compile.sh
 10. To Run (4 process):
