@@ -19,7 +19,7 @@
      *      ./1-install_worker.sh
      *      ./2-cluster_worker.sh
      *      ./3-mono_mpi.sh
-3. Execute on Master and Workers (yes for all questions). No password should be required:
+3. Execute on Master and Workers (yes for all questions). **NOTE: No password should be required**:
      *      ssh n0
      *      ssh n1
      * ...
