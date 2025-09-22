@@ -10,7 +10,7 @@
 
 3. ## 🚀 Jaguar interative terminal (Parallel Environment mode) on Windows:
 ##### Open the cmd or powershell.
-##### Create a folder, where source code will cloned. For example: c:\MPI
+##### Create a folder, which source code will be cloned. For example: c:\MPI
 <pre><code>cd c:\MPI</code></pre>
 <pre><code>git clone https://github.com/UFC-Jaguar/jaguar-lang</code></pre>
 <pre><code>cd jaguar-lang\Base\bin</code></pre>
