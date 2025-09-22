@@ -1,15 +1,14 @@
-Download address: https://www.microsoft.com/en-us/download/details.aspx?id=105289
-Download the follow files:
-  msmpisetup.exe
-  msmpisdk.msi
+#### Go to Microsoft Site: https://www.microsoft.com/en-us/download/details.aspx?id=105289
+1. Download the follow files:
+  *   msmpisetup.exe
+  *   msmpisdk.msi
+  *   install each (msmpisetup.exe, msmpisdk.msi)
 
-install each (msmpisetup.exe, msmpisdk.msi).
-To run MPI applications, use the MPI command line. 
-Sample with 4 MPI process ("MyApp.exe"):
-  mpiexec -n 4 .\MyApp.exe
+2. To run MPI applications, use the MPI command line: 
+  *   mpiexec -n 4 .\MyApp.exe
+  *   The previous sample will use 4 MPI process, for "MyApp.exe" application.
 
-
-## 🚀 For Run Parallel Environment on Windows:
+3. ## 🚀 Jaguar interative terminal (Parallel Environment mode) on Windows:
 ##### Open the cmd or powershell.
 ##### Create a folder, where source code will cloned. For example: c:\MPI
 <pre><code>cd c:\MPI</code></pre>
@@ -18,5 +17,5 @@ Sample with 4 MPI process ("MyApp.exe"):
 ##### The easy mode for compile and run:
 1. Install [Visual Studio Community](https://visualstudio.microsoft.com/pt-br/downloads/)
 2. Compile using Visual Studio Community.
-3. Run the run.bat:
+3. Run:
 <pre><code>mpiexec -n 4 ./Jaguar.exe</code></pre>
