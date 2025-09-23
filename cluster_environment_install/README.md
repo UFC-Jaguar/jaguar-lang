@@ -32,7 +32,7 @@ export LD_LIBRARY_PATH=${MPI_HOME}/lib:$LD_LIBRARY_PATH
      *      sudo cp mono_mpi_environment.tar.gz /opt/
      *      cd /opt/
      * Optional (without sudo) - change permission on /opt:
-     *      sudo chown your_user:your_group /opt
+     *      sudo chown $USER:$GROUPS /opt
 5. "Unzip" the file:
      *      sudo tar -xzf mono_mpi_environment.tar.gz
 6. Open the folder to install:
