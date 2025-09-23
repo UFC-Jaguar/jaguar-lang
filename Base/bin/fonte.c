@@ -51,5 +51,5 @@ while i < 13 do; let i = i + 1; if i == 5 do continue; if i == 9 do break; let a
 print(i)
 print(a)
 
-l = for i = 0 to size do ("List item " + i + " : Msg target to node " + i)
-allprint("P" + pid + " -> " + || .scatter(l))
+//l = for i = 0 to size do ("List item " + i + " : Msg target to node " + i)
+//allprint("P" + pid + " -> " + || .scatter(l))
