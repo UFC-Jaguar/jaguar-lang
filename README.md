@@ -3,7 +3,7 @@
 ### The parallel version is named "Jaguar".
 ### **Jaguar** is a project of general-purpose language, where the resources aims to:
 1. #### Parallel programming;
-2. #### Teory of graphs suport;
+2. #### Teory of graphs support;
 3. #### Expressive syntactic.
 ## Around this issue, we are looking for:
 1. #### Otmizations;
