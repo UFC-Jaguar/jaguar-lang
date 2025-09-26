@@ -85,28 +85,33 @@ namespace FrontEnd.Nodes {
             if (ArgsVisitors.Length != 1) 
                 return this.DefaultError(manager, memory, msg_scatter[0]);
 
-            List<object> dados = new List<object>();
-
-            if (ArgsVisitors[0].GetType() == typeof(NoList)) {
-                NoList list = (NoList)ArgsVisitors[0];
-                foreach (Visitor v in list.Elements) {
-                    TValue x = v.Value;
-                    if (v.GetType() == typeof(NoVarAccess)) x = this.Valor((NoVarAccess)v, memory);
-                    else if (v.Value.Null) x = manager.Registry(v.Visit(memory));
-                    if (!x.Null) dados.Add(x);
+            object[] values = new object[MPIEnv.Size];
+            int n = 0;
+            if (MPIEnv.Rank == MPIEnv.Root) {
+                List<object> dados = new List<object>();
+                if (ArgsVisitors[0].GetType() == typeof(NoList)) {
+                    NoList list = (NoList)ArgsVisitors[0];
+                    foreach (Visitor v in list.Elements) {
+                        TValue x = v.Value;
+                        if (v.GetType() == typeof(NoVarAccess)) x = this.Valor((NoVarAccess)v, memory);
+                        else if (v.Value.Null) x = manager.Registry(v.Visit(memory));
+                        if (!x.Null) dados.Add(x);
+                    }
                 }
-            }
-            else if (ArgsVisitors[0].GetType() == typeof(NoVarAccess)) {
-                TValue v = this.Valor((NoVarAccess)ArgsVisitors[0], memory);
-                if (v == null || (v.GetType() != typeof(TList))) 
-                    return this.DefaultError(manager, memory, msg_scatter[1]);
-                TList l = (TList)v;
-                foreach (TValue x in l.VAL) {
-                    dados.Add(x);
+                else if (ArgsVisitors[0].GetType() == typeof(NoVarAccess)) {
+                    TValue v = this.Valor((NoVarAccess)ArgsVisitors[0], memory);
+                    if (v == null || (v.GetType() != typeof(TList))) 
+                        return this.DefaultError(manager, memory, msg_scatter[1]);
+                    TList l = (TList)v;
+                    foreach (TValue x in l.VAL) {
+                        dados.Add(x);
+                    }
                 }
+                values = dados.ToArray();
+                n = dados.Count;
             }
-            if (dados.Count == MPIEnv.Size) { // Coleta de dados ok
-                object[] values = dados.ToArray();
+            n = MPIEnv.Comm_world.Allreduce<int>(n, Operation<int>.Max);
+            if (n == MPIEnv.Size) { // Coleta de dados ok
                 object valor = MPIEnv.Comm_world.Scatter<object>(values, MPIEnv.Root);
                 MPIEnv.Comm_world.Barrier();
                 TValue num = (TValue)valor; //new TString("....", memory).SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
