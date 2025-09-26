@@ -94,7 +94,7 @@ namespace Common.Data {
             public static readonly string CONCAT_LIST      = "CONCAT_LIST".ToLower();
             public static readonly string LEN              = "LEN".ToLower();
             public static readonly string INCLUDE          = "INCLUDE".ToLower();
-            public static readonly string MPI_RANK         = "PID".ToLower();
+            public static readonly string MPI_RANK         = "PID".ToLower(); // pid
             public static readonly string MPI_SIZE         = "SIZE".ToLower();
             public static readonly string MPI_SUM          = "MPI_SUM".ToLower();
             //public static readonly string CLS            = "CLS".ToLower();
