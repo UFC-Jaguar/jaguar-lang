@@ -39,17 +39,17 @@ namespace Common.Data {
         //#####################################
         public MemoryManager Run_print(JMemory memoryData) {
             if (MPIEnv.Rank == MPIEnv.Root) {
-                System.Console.WriteLine(memoryData.SymbolTable.Get("Value").ToString());
+                System.Console.WriteLine(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString());
             }
             return new MemoryManager().Success(Consts.Number.Null);
         }
         public MemoryManager Run_allprint(JMemory memoryData) {
-            System.Console.WriteLine(memoryData.SymbolTable.Get("Value").ToString());
+            System.Console.WriteLine(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString());
             MPIEnv.Comm_world.Barrier();
             return new MemoryManager().Success(Consts.Number.Null);
         }
         public MemoryManager Run_str(JMemory memoryData) {
-            return new MemoryManager().Success( ( new Common.Data.TString(memoryData.SymbolTable.Get("Value").ToString())  )  );
+            return new MemoryManager().Success( ( new Common.Data.TString(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString())  )  );
         }
         public MemoryManager Run_input(JMemory memoryData) {
             string text = Util.ReadText("### ");
@@ -73,24 +73,24 @@ namespace Common.Data {
             return new MemoryManager().Success(Consts.Number.Null);
         }
         public MemoryManager Run_is_number(JMemory memoryData) {
-            return (memoryData.SymbolTable.Get("Value").GetType() == typeof(TNumber)) ?
+            return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(TNumber)) ?
                 new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
         }
         public MemoryManager Run_is_string(JMemory memoryData) {
-            return (memoryData.SymbolTable.Get("Value").GetType() == typeof(Common.Data.TString)) ?
+            return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(Common.Data.TString)) ?
                 new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
         }
         public MemoryManager Run_is_list(JMemory memoryData) {
-            return (memoryData.SymbolTable.Get("Value").GetType() == typeof(Common.Data.TList)) ?
+            return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(Common.Data.TList)) ?
                 new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
         }
         public MemoryManager Run_is_function(JMemory memoryData) {
-            return (memoryData.SymbolTable.Get("Value").GetType() == typeof(TBaseFunction)) ?
+            return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(TBaseFunction)) ?
                 new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
         }
         public MemoryManager Run_push(JMemory memoryData) {
-            TValue lista = memoryData.SymbolTable.Get("list");
-            TValue value = memoryData.SymbolTable.Get("Value");
+            TValue lista = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
+            TValue value = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue);
 
             if (lista.GetType() != typeof(TList)) {
                 return new MemoryManager().Fail(new TRunTimeError(
@@ -103,8 +103,8 @@ namespace Common.Data {
             return new MemoryManager().Success(lista);
         }
         public MemoryManager Run_pop(JMemory memoryData) {
-            TValue lista = memoryData.SymbolTable.Get("list");
-            TValue index = memoryData.SymbolTable.Get("index");
+            TValue lista = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
+            TValue index = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KIndex);
 
             if (lista.GetType() != typeof(TList)) {
                 return new MemoryManager().Fail(new TRunTimeError(
@@ -137,7 +137,7 @@ namespace Common.Data {
             return new MemoryManager().Success(element);
         }
         public MemoryManager Run_len(JMemory memoryData) {
-            TValue list_ = memoryData.SymbolTable.Get("list");
+            TValue list_ = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
 
             if (list_.GetType() != typeof(TList)) {
               return new MemoryManager().Fail(new TRunTimeError(
@@ -149,7 +149,7 @@ namespace Common.Data {
             return new MemoryManager().Success(new TNumber(((TList)list_).VAL.Count));
         }
         public MemoryManager Run_include(JMemory memoryData) {
-            TValue fn_ = memoryData.SymbolTable.Get("FileName");
+            TValue fn_ = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KFileName);
 
             if (fn_.GetType() != typeof(Common.Data.TString)) {
                 return new MemoryManager().Fail(new TRunTimeError(
@@ -184,15 +184,15 @@ namespace Common.Data {
         }
 
         public MemoryManager Run_mpi_sum(JMemory memoryData) {
-            float x = (float) ((TNumber) memoryData.SymbolTable.Get("Value")).Value;
+            float x = (float) ((TNumber) memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue)).Value;
             return new MemoryManager().Success(new TNumber(x));
         }
     }
 }
 
 /*public MemoryManager Run_concat_list(JMemory memoryData) {
-    TValue listA = memoryData.SymbolTable.Get("listA");
-    TValue listB = memoryData.SymbolTable.Get("listB");
+    TValue listA = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KListA);
+    TValue listB = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KListB);
     if (listA.GetType() != typeof(TList)) {
         return new MemoryManager().Fail(new TRunTimeError(
           this.NOIni, this.NOEnd,

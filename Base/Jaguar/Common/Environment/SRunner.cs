@@ -62,7 +62,7 @@ namespace Common.Environment {
             */
             string line = Util.ReplText("S"+Runner.prompt + ">").Trim();
             if (line != "") {
-                string not_provide = "\"It's dont include on serial version\"";
+                string not_provide = "\"It isn't include on a serial version\"";
                 if (line.ToCharArray()[0] == '|') return not_provide;
                 if (line.Length >= 8 && line.Substring(0, 8) == "allprint") return not_provide;
             }

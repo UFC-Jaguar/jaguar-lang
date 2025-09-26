@@ -119,27 +119,40 @@ namespace Common.Data {
         }
         public abstract class ArgNames {// TODO: Sempre verificar o Max, se 16 key/values datas in _values
             private static readonly IDictionary<string, string[]> _values = new Dictionary<string, string[]>(16);
+            private static readonly KeysEmbed _keys = new KeysEmbed();
             private static IDictionary<string, string[]> Values { get { return _values; } }
+            /*
+             * Essas chaves (Keys) devem ser verificadas em EmbeddedFunction
+             * De fato, Keys aqui são chaves genéricas acessíveis em memória filha (JMemory), retornando o valor (parâmetro).
+             */
+            public static KeysEmbed Keys { get { return _keys; } }
             public static string[] Get(string key) { return Values[key]; }
-            static ArgNames() {
-                Values[Consts.EmbeddedFunction.PRINT]           = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.ALLPRINT]        = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.INCLUDE]         = new string[1] { "FileName" };
-                Values[Consts.EmbeddedFunction.MPI_SUM]         = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.STR]             = new string[1] { "Value" };
+            static ArgNames() { // Isto aqui diz quantos argumentos uma função embarcada possui.
                 Values[Consts.EmbeddedFunction.INPUT]           = new string[0]; // OBS: vetor vazio
                 Values[Consts.EmbeddedFunction.INPUT_INT]       = new string[0]; // OBS: vetor vazio
                 Values[Consts.EmbeddedFunction.CLEAR]           = new string[0]; // OBS: vetor vazio
-                Values[Consts.EmbeddedFunction.IS_NUMBER]       = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.IS_STRING]       = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.IS_LIST]         = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.IS_FUNCTION]     = new string[1] { "Value" };
-                Values[Consts.EmbeddedFunction.PUSH]            = new string[2] { "list", "Value" };
-                Values[Consts.EmbeddedFunction.POP]             = new string[2] { "list", "index" };
-                Values[Consts.EmbeddedFunction.LEN]             = new string[1] { "list" };
-                //Values[Consts.EmbeddedFunction.CONCAT_LIST]   = new string[2] { "listA", "listB" };
+                Values[Consts.EmbeddedFunction.PRINT]           = new string[1] { Keys.KValue }; // Exemplo: print("oi")
+                Values[Consts.EmbeddedFunction.ALLPRINT]        = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.MPI_SUM]         = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.STR]             = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.IS_NUMBER]       = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.IS_STRING]       = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.IS_LIST]         = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.IS_FUNCTION]     = new string[1] { Keys.KValue };
+                Values[Consts.EmbeddedFunction.LEN]             = new string[1] { Keys.KList };
+                Values[Consts.EmbeddedFunction.PUSH]            = new string[2] { Keys.KList, Keys.KValue };
+                Values[Consts.EmbeddedFunction.POP]             = new string[2] { Keys.KList, Keys.KIndex };
+                //Values[Consts.EmbeddedFunction.CONCAT_LIST]   = new string[2] { Keys.KListA, Keys.KListB }; // Exemplo: 2 listas. A linguagem já prevê isso: [1]+[2]==[1,2].
+                Values[Consts.EmbeddedFunction.INCLUDE]         = new string[1] { Keys.KFileName };
+            }
+            public class KeysEmbed {
+                public string KValue { get { return "Value"; } }
+                public string KFileName { get { return "FileName"; } }
+                public string KList { get { return "list"; } }
+                public string KIndex { get { return "index"; } }
+                public string KListA { get { return "listA"; } }
+                public string KListB { get { return "listB"; } }
             }
         }
     }
 }
-// TODO: Corrigir CONCAT_LIST, bem como as representacoes finais e to string, de TString e TList
