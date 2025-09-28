@@ -124,6 +124,21 @@ namespace AulaMPI2 {
 
             Console.WriteLine(s);
         }
+        public static void Gather() {
+            int n = MPIEnv.Rank;
+            int[] alln = MPIEnv.Comm_world.Gather<int>(n, MPIEnv.Root);
+            MPIEnv.Comm_world.Barrier();
+
+            if (MPIEnv.Rank == MPIEnv.Root) {
+                string s = "Gather: node " + MPIEnv.Rank + " -> ";
+
+                for (int i = 0; i < alln.Length; i++)
+                    s = s + alln[i] + " ";
+
+                Console.WriteLine(s);
+            }
+        }
+
         public static void allToAll() {
             int[] values = new int[MPIEnv.Size];
             for (int i = 0; i < values.Length; i++)
