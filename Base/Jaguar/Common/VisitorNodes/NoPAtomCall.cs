@@ -24,6 +24,7 @@ namespace FrontEnd.Nodes {
                 "So, the print emite: 10, 20, 30, 40 (for 0,1,2,3 pid process)", 
                 "\n      Parameter Error (Variable: NoVarAccess Null)",
                 "\n      Parallel Method not found!!!!!!!!!!!!!!"};
+        private string[] msg_gather = { "NOTE: gather need one value object!" };
 
         public NoVarAccess IDToCall = null;
         public Visitor[] ArgsVisitors = null;
@@ -80,6 +81,26 @@ namespace FrontEnd.Nodes {
             return rtr.Success(return_value);
         }
         //******************************
+        public MemoryManager visit_gather(JMemory memory) {
+            MemoryManager manager = new MemoryManager();
+            if (ArgsVisitors.Length != 1)
+                return this.DefaultError(manager, memory, msg_gather[0]);
+
+            TValue gather_value = Consts.Number.Null;
+            Visitor visitor = (Visitor)ArgsVisitors[0];
+            TValue tval = visitor.Value;
+            if (visitor.Value.Null)
+                tval = manager.Registry(visitor.Visit(memory));
+            if (!tval.Null)
+                gather_value = tval;
+            TValue[] mpi_gather_values = MPIEnv.Comm_world.Gather<TValue>(gather_value, MPIEnv.Root);
+            TList result = new TList(new List<TValue>());
+            if (MPIEnv.Rank == MPIEnv.Root)
+                result = new TList(new List<TValue>(mpi_gather_values));
+            MPIEnv.Comm_world.Barrier();
+            return manager.Success(result.SetLocation(this.NOIni, this.NOEnd).SetMemory(memory));
+        }
+
         public MemoryManager visit_scatter(JMemory memory) {// scatter()
             MemoryManager manager = new MemoryManager();
             if (ArgsVisitors.Length != 1) 
