@@ -11,10 +11,16 @@ namespace Common.Data {
             this.VAL = elements;
         }
         public override TValue Add(TValue other) {
-            TList copyList = (TList) this.Copy();
-            copyList.VAL.Add(other);
-            copyList.Error = null;
-            return copyList;
+            TList copyOfList = (TList)this.Copy();
+            if (other.GetType() == typeof(TList)) {
+                TList o = (TList)other;
+                foreach (TValue n in o.VAL)
+                    copyOfList.VAL.Add(n);
+                return copyOfList;
+            }
+            copyOfList.VAL.Add(other);
+            copyOfList.Error = null;
+            return copyOfList;
         }
         public override TValue Sub(TValue other){
             TList copyList = (TList) this.Copy();
@@ -40,15 +46,14 @@ namespace Common.Data {
             return copyList;
         }
         public override TValue Multiply(TValue other) {
-            TList copyOfList = (TList) this.Copy();
-            if (other.GetType() == typeof(TList)){
-                TList o = (TList)other;
-                foreach (TValue n in o.VAL)
-                    copyOfList.VAL.Add(n);
-                return copyOfList;
+            TList result_list = new TList(new List<TValue>());
+            if (other.GetType() == typeof(TNumber)){
+                foreach (TValue n in this.VAL)
+                    result_list.VAL.Add(n.Multiply(other));
+                return result_list;
             }
-            copyOfList.Error = this.IllegalOp(other);
-            return copyOfList; 
+            result_list.Error = new TError(this.NOIni, this.NOEnd, TError.ERun, "TList.Multiply by {"+other+"} not defined!!!");
+            return result_list; 
         }
         public override TValue Divide(TValue other) {
             if (other.GetType() == typeof(TNumber)){
