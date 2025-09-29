@@ -28,6 +28,7 @@ namespace Common.Data {
             SymbolTable.Set(Consts.EmbeddedFunction.NULL, Consts.Number.Null);
             SymbolTable.Set(Consts.EmbeddedFunction.PI, Consts.Number.PI);
             SymbolTable.Set(Consts.EmbeddedFunction.MPI_RANK, Consts.Number.Rank);
+            SymbolTable.Set(Consts.EmbeddedFunction.MPI_MANAGER, Consts.Number.Manager);
             SymbolTable.Set(Consts.EmbeddedFunction.MPI_SIZE, Consts.Number.Size);
 
             SymbolTable.Set(Consts.EmbeddedFunction.PRINT, Consts.EmbeddedFunction.E_PRINT);
@@ -43,7 +44,7 @@ namespace Common.Data {
             SymbolTable.Set(Consts.EmbeddedFunction.IS_LIST, Consts.EmbeddedFunction.E_IS_LIST);
             SymbolTable.Set(Consts.EmbeddedFunction.IS_FUNCTION, Consts.EmbeddedFunction.E_IS_FUNCTION);
             SymbolTable.Set(Consts.EmbeddedFunction.PUSH, Consts.EmbeddedFunction.E_PUSH);
-            SymbolTable.Set(Consts.EmbeddedFunction.POP, Consts.EmbeddedFunction.E_POP);
+            SymbolTable.Set(Consts.EmbeddedFunction.GET, Consts.EmbeddedFunction.E_GET);
             SymbolTable.Set(Consts.EmbeddedFunction.LEN, Consts.EmbeddedFunction.E_LEN);
 
             //SymbolTable.Set(Consts.EmbeddedFunction.CLS, Consts.EmbeddedFunction.E_CLEAR);

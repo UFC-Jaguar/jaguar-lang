@@ -63,12 +63,13 @@ namespace Common.Data {
         //public static TNull Null { get { return TNull.Get(); } } // Verificar se eh interessante trocar (TNumber Null por TNull Null)?
         public abstract class Number {
             // Statics objects
-            private readonly static TNumber _null   = new TNumber((float?)null);        public static TNumber Null  { get { return _null;   } }
-            private readonly static TNumber _false  = new TNumber(0);                   public static TNumber False { get { return _false;  } }
-            private readonly static TNumber _true   = new TNumber(1);                   public static TNumber True  { get { return _true;   } }
-            private readonly static TNumber _pi     = new TNumber(3.1415926535897931f); public static TNumber PI    { get { return _pi;     } }
-            private readonly static TNumber _rank   = new TNumber(MPIEnv.Rank);         public static TNumber Rank  { get { return _rank;   } }
-            private readonly static TNumber _size   = new TNumber(MPIEnv.Size);         public static TNumber Size  { get { return _size;   } }
+            private readonly static TNumber _null    = new TNumber((float?)null);           public static TNumber Null    { get { return _null;    } }
+            private readonly static TNumber _false   = new TNumber(0);                      public static TNumber False   { get { return _false;   } }
+            private readonly static TNumber _true    = new TNumber(1);                      public static TNumber True    { get { return _true;    } }
+            private readonly static TNumber _pi      = new TNumber(3.1415926535897931f);    public static TNumber PI      { get { return _pi;      } }
+            private readonly static TNumber _rank    = new TNumber(MPIEnv.Rank);            public static TNumber Rank    { get { return _rank;    } }
+            private readonly static TNumber _manager = new TNumber((1-MPIEnv.Rank)<=0?0:1); public static TNumber Manager { get { return _manager; } }
+            private readonly static TNumber _size    = new TNumber(MPIEnv.Size);            public static TNumber Size    { get { return _size;    } }
         }
         public abstract class EmbeddedFunction {
             public static readonly string INI = "Run_";
@@ -90,11 +91,12 @@ namespace Common.Data {
             public static readonly string IS_LIST          = "IS_LIST".ToLower();
             public static readonly string IS_FUNCTION      = "IS_FUNCTION".ToLower();
             public static readonly string PUSH             = "PUSH".ToLower();
-            public static readonly string POP              = "POP".ToLower();
+            public static readonly string GET              = "GET".ToLower();
             public static readonly string CONCAT_LIST      = "CONCAT_LIST".ToLower();
             public static readonly string LEN              = "LEN".ToLower();
             public static readonly string INCLUDE          = "INCLUDE".ToLower();
-            public static readonly string MPI_RANK         = "PID".ToLower(); // pid
+            public static readonly string MPI_RANK         = "PID".ToLower(); // pid/rank
+            public static readonly string MPI_MANAGER      = "MANAGER".ToLower(); // manager/root
             public static readonly string MPI_SIZE         = "SIZE".ToLower();
             public static readonly string MPI_SUM          = "MPI_SUM".ToLower();
             //public static readonly string CLS            = "CLS".ToLower();
@@ -113,7 +115,7 @@ namespace Common.Data {
             public static readonly TEmbeddedFunction E_IS_LIST      = new TEmbeddedFunction(Consts.EmbeddedFunction.IS_LIST);
             public static readonly TEmbeddedFunction E_IS_FUNCTION  = new TEmbeddedFunction(Consts.EmbeddedFunction.IS_FUNCTION);
             public static readonly TEmbeddedFunction E_PUSH         = new TEmbeddedFunction(Consts.EmbeddedFunction.PUSH);
-            public static readonly TEmbeddedFunction E_POP          = new TEmbeddedFunction(Consts.EmbeddedFunction.POP);
+            public static readonly TEmbeddedFunction E_GET          = new TEmbeddedFunction(Consts.EmbeddedFunction.GET);
             public static readonly TEmbeddedFunction E_LEN          = new TEmbeddedFunction(Consts.EmbeddedFunction.LEN);
             //public static readonly TEmbeddedFunction E_CONCAT_LIST= new TEmbeddedFunction(Consts.EmbeddedFunction.CONCAT_LIST);
         }
@@ -141,7 +143,7 @@ namespace Common.Data {
                 Values[Consts.EmbeddedFunction.IS_FUNCTION]     = new string[1] { Keys.KValue };
                 Values[Consts.EmbeddedFunction.LEN]             = new string[1] { Keys.KList };
                 Values[Consts.EmbeddedFunction.PUSH]            = new string[2] { Keys.KList, Keys.KValue };
-                Values[Consts.EmbeddedFunction.POP]             = new string[2] { Keys.KList, Keys.KIndex };
+                Values[Consts.EmbeddedFunction.GET]             = new string[2] { Keys.KList, Keys.KIndex };
                 //Values[Consts.EmbeddedFunction.CONCAT_LIST]   = new string[2] { Keys.KListA, Keys.KListB }; // Exemplo: 2 listas. A linguagem já prevê isso: [1]+[2]==[1,2].
                 Values[Consts.EmbeddedFunction.INCLUDE]         = new string[1] { Keys.KFileName };
             }

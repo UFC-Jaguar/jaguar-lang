@@ -102,7 +102,7 @@ namespace Common.Data {
           ((TList)lista).VAL.Add(value);
             return new MemoryManager().Success(lista);
         }
-        public MemoryManager Run_pop(JMemory memoryData) {
+        public MemoryManager Run_get(JMemory memoryData) {
             TValue lista = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
             TValue index = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KIndex);
 
