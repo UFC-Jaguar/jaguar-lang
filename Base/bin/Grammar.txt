@@ -42,15 +42,10 @@
 
 
 # Note que, para if/elif/else, temos duas opções abaixo: inline e NEWLINE. Poderíamos melhorar? Ou deixar tudo com mesma regra?
-<IfExp> ::= KEY:IF <Exp> KEY:DO (<Stm> [(<Elif> | <Else>)]
-                                   | NEWLINE <Statements> (KEY:END | <Elif> | <Else>)
-                                )
-<Elif>  ::= KEY:ELIF <Exp> KEY:DO (<Stm> [(<Elif> | <Else>)]
-                                     | NEWLINE <Statements> (KEY:END | <Elif> | <Else>)
-                                  )
-<Else>  ::= KEY:ELSE (<Stm>
-                        | (NEWLINE <Statements> KEY:END)
-                     )
+<IfCase ::= <Exp> KEY:DO <Statements> (KEY:END | <Elif> | <Else>)
+<IfExp> ::= KEY:IF   <IfCase>
+<Elif>  ::= KEY:ELIF <IfCase>
+<Else>  ::= KEY:ELSE <Statements> KEY:END
 
 <ForExp>        ::= KEY:FOR ID EQ <Exp> KEY:TO <Exp>  [KEY:STEP <Exp>] KEY:DO  <Stm>   |  (NEWLINE <Statements> KEY:END)
 <WhileExp>      ::= KEY:WHILE <Exp> KEY:DO  <Stm>  |  (NEWLINE <Statements> KEY:END)
