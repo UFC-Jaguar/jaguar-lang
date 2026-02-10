@@ -63,17 +63,13 @@ namespace Common.Nodes {
             return manager.Success(Consts.Number.Null);
         }
         //################################################ VAL ELSE:
-        public class NoElse : Visitor {
+        public class NoElse {
             public Visitor Body { get; set; } 
             public bool NeedReturn { get; set; } 
 
             public NoElse(Visitor body, bool need_return) {
                 this.Body = body;
                 this.NeedReturn = need_return;
-            }
-
-            public override MemoryManager Visit(JMemory memory) { // TODO: Ver isso. Podemos tratar algo aqui no visit?
-                throw new NotImplementedException();
             }
         }
         //################################################ VAL ELIF:

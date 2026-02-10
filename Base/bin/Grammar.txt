@@ -42,7 +42,7 @@
 
 
 # Note que, para if/elif/else, temos duas opções abaixo: inline e NEWLINE. Poderíamos melhorar? Ou deixar tudo com mesma regra?
-<IfCase ::= <Exp> KEY:DO <Statements> (KEY:END | <Elif> | <Else>)
+<IfCase>::= <Exp> KEY:DO <Statements> (KEY:END | <Elif> | <Else>)
 <IfExp> ::= KEY:IF   <IfCase>
 <Elif>  ::= KEY:ELIF <IfCase>
 <Else>  ::= KEY:ELSE <Statements> KEY:END
