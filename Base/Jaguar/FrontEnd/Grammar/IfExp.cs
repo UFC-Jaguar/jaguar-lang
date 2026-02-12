@@ -3,10 +3,10 @@ using Common.Nodes;
 using FrontEnd.Parsing;
 using Common.Data;
 using Common.Errors;
+using static Common.Nodes.NoIF;
 
 namespace FrontEnd.Grammar {
     public class IfExp : Grammar {
-        private readonly List<NoIF.NoDataIFs> conditions_case = new List<NoIF.NoDataIFs>();
         public AstInfo Rule(Parser parser) {
             AstInfo ast = new AstInfo();
             Visitor if_expression = ast.Registry(this.IFNODE(parser, Consts.KEYS[Consts.IDX.IF]));
@@ -15,6 +15,7 @@ namespace FrontEnd.Grammar {
         }
         private AstInfo IFNODE(Parser parser, string keyIF_ELIF) {
             AstInfo ast = new AstInfo();
+            List<NoIF.NoDataIFs> conditions_case = new List<NoIF.NoDataIFs>();
             if (!parser.Current.Matches(Consts.KEY, keyIF_ELIF)) {
                 return ast.Fail(new TError(
                   parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
@@ -48,12 +49,14 @@ namespace FrontEnd.Grammar {
                 Visitor noElif = ast.Registry(this.IFNODE(parser, Consts.KEYS[Consts.IDX.ELIF]));
                 if (ast.Error != null)
                     return ast;
+                conditions_case.AddRange(((NoIF)noElif).IFCases);
                 return ast.Success(new NoIF(conditions_case, ((NoIF)noElif).Else));
             }
             if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.ELSE])) { // else
                 Visitor noElse = ast.Registry(this.Call_Else(parser));
                 if (ast.Error != null)
                     return ast;
+                conditions_case.AddRange(((NoIF)noElse).IFCases);
                 return ast.Success(new NoIF(conditions_case, ((NoIF)noElse).Else));
             }
             return ast.Fail(new TError( // Falha
@@ -81,7 +84,7 @@ namespace FrontEnd.Grammar {
                 }
                 parser.NextToken(ast);
             }
-            return ast.Success(new NoIF(conditions_case, noElse));
+            return ast.Success(new NoIF(new List<NoIF.NoDataIFs>(), noElse));
         }
     }
 }
