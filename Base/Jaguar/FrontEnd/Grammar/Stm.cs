@@ -28,7 +28,7 @@ namespace FrontEnd.Grammar {
             }
             Visitor exp = ast.Registry(new Exp().Rule(parser));
             if (ast.Error!=null){
-              return ast.Fail(new TError(
+              return ast; /*ast.Fail(new TError(
                 parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
                 "Expected '" + 
                 Consts.KEYS[Consts.IDX.RETURN] + "', '" + 
@@ -40,7 +40,7 @@ namespace FrontEnd.Grammar {
                 Consts.KEYS[Consts.IDX.WHILE] + "', '" + 
                 Consts.KEYS[Consts.IDX.DEF] + "', int, float, identifier, '+', '-', '(', '[' Or '" + 
                 Consts.KEYS[Consts.IDX.NOT] + "'"
-              ));
+              ));*/
             }
             return ast.Success(exp);
         }

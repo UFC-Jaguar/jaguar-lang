@@ -7,10 +7,51 @@ using static Common.Nodes.NoIF;
 
 namespace FrontEnd.Grammar {
     public class IfExp : Grammar {
+        public List<NoIF.NoDataIFs> ConditionsCase { get; set; }
+        public IfExp() { this.ConditionsCase = new List<NoIF.NoDataIFs>(); }
+        public AstInfo Rule(Parser parser) {
+            var ast = this.IFNODE(parser, Consts.KEYS[Consts.IDX.IF]);
+            Visitor condition = ast.Node;
+            return (new IfCase(condition, this.ConditionsCase)).Rule(parser);
+        }
+        private AstInfo IFNODE(Parser parser, string _key) {
+            AstInfo ast = new AstInfo();
+            if (!parser.Current.Matches(Consts.KEY, _key)) {
+                return ast.Fail(new TError(
+                  parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+                  "Expected '" + _key + "'"
+                ));
+            }
+            parser.NextToken(ast);
+
+            Visitor condition = ast.Registry(new Exp().Rule(parser));
+            if (ast.Error != null)
+                return ast;
+            return ast.Success(condition);
+        }
+    }
+}
+
+
+/*
+//using System;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using static Common.Nodes.NoIF;
+using Common.Data;
+using Common.Errors;
+using Common.Nodes;
+using FrontEnd.Parsing;
+using System.Collections.Generic;
+
+namespace FrontEnd.Grammar {
+    public class IfExp : Grammar {
         public AstInfo Rule(Parser parser) {
             AstInfo ast = new AstInfo();
             Visitor if_expression = ast.Registry(this.IFNODE(parser, Consts.KEYS[Consts.IDX.IF]));
-            if (ast.Error != null) return ast;
+            if (ast.Error != null)
+                return ast;
             return ast.Success(if_expression);
         }
         private AstInfo IFNODE(Parser parser, string keyIF_ELIF) {
@@ -25,7 +66,8 @@ namespace FrontEnd.Grammar {
             parser.NextToken(ast);
 
             Visitor condition = ast.Registry(new Exp().Rule(parser));
-            if (ast.Error != null) return ast;
+            if (ast.Error != null)
+                return ast;
             if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.DO])) {
                 return ast.Fail(new TError(
                   parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
@@ -42,7 +84,7 @@ namespace FrontEnd.Grammar {
 
             if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.END])) {
                 parser.NextToken(ast);
-                return ast.Success(new NoIF(conditions_case, null)); 
+                return ast.Success(new NoIF(conditions_case, null));
             }
             // Case ELIF_Else
             if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.ELIF])) { // elif
@@ -61,7 +103,7 @@ namespace FrontEnd.Grammar {
             }
             return ast.Fail(new TError( // Falha
                 parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                "Expected '" + Consts.KEYS[Consts.IDX.IF] + "'" + Consts.KEYS[Consts.IDX.ELIF]+"' or " + Consts.KEYS[Consts.IDX.ELSE]
+                "Expected '" + Consts.KEYS[Consts.IDX.IF] + "'" + Consts.KEYS[Consts.IDX.ELIF] + "' or " + Consts.KEYS[Consts.IDX.ELSE]
             ));
         }
         private AstInfo Call_Else(Parser parser) {
@@ -89,4 +131,4 @@ namespace FrontEnd.Grammar {
     }
 }
 
-
+ */

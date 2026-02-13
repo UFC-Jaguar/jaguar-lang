@@ -40,8 +40,6 @@
                       |  {COMMA <Exp>}  # Set
                     )
 
-
-# Note que, para if/elif/else, temos duas opções abaixo: inline e NEWLINE. Poderíamos melhorar? Ou deixar tudo com mesma regra?
 <IfCase>::= <Exp> KEY:DO <Statements> (KEY:END | <IfElif> | <IfElse>)
 <IfExp> ::= KEY:IF   <IfCase>
 <IfElif>  ::= KEY:ELIF <IfCase>

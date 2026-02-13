@@ -36,7 +36,7 @@ namespace FrontEnd.Grammar {
                 new Tuple<string, string>(Consts.KEY, Consts.KEYS[Consts.IDX.OR]) };
             Visitor node = ast.Registry(NoOpBinaria.Perform(parser, new LogicExp(), tps));
             if (ast.Error != null) {
-                return ast.Fail(new TError(
+                return ast; /*ast.Fail(new TError(
 				    parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
                     "Expected '" +
                     Consts.KEYS[Consts.IDX.LET]+"', '"+
@@ -45,7 +45,7 @@ namespace FrontEnd.Grammar {
                     Consts.KEYS[Consts.IDX.WHILE] + "', '" + 
                     Consts.KEYS[Consts.IDX.DEF] + "', int, float, identifier, '+', '-', '(', '[' Or '" + 
                     Consts.KEYS[Consts.IDX.NOT] + "'"
-                ));
+                ));*/
             }
             return ast.Success(node);
         }
