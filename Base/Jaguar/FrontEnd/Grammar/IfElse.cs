@@ -1,20 +1,13 @@
-﻿//using System;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using static Common.Nodes.NoIF;
+﻿using System.Collections.Generic;
 using Common.Data;
-using Common.Errors;
 using Common.Nodes;
+using Common.Errors;
 using FrontEnd.Parsing;
-using System.Collections.Generic;
 
 namespace FrontEnd.Grammar {
     public class IfElse : Grammar {
         public List<NoIF.NoDataIFs> ConditionsCase { get; set; }
-        public IfElse(List<NoIF.NoDataIFs> cc) {
-            this.ConditionsCase = cc;
-        }
+        public IfElse(List<NoIF.NoDataIFs> cc) { this.ConditionsCase = cc; }
         public AstInfo Rule(Parser parser) {
             AstInfo ast = new AstInfo();
             Visitor noElse = ast.Registry(this.Call_Else(parser));

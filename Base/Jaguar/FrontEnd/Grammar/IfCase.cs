@@ -1,13 +1,8 @@
-﻿//using System;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using static Common.Nodes.NoIF;
+﻿using System.Collections.Generic;
 using Common.Data;
 using Common.Errors;
 using Common.Nodes;
 using FrontEnd.Parsing;
-using System.Collections.Generic;
 
 namespace FrontEnd.Grammar {
     public class IfCase : Grammar {

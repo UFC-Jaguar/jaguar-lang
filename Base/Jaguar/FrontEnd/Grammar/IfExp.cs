@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Common.Nodes;
-using FrontEnd.Parsing;
 using Common.Data;
+using Common.Nodes;
 using Common.Errors;
-using static Common.Nodes.NoIF;
+using FrontEnd.Parsing;
 
 namespace FrontEnd.Grammar {
     public class IfExp : Grammar {

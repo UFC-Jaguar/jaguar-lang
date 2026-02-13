@@ -20,6 +20,7 @@ namespace Common.Data {
             KEYS[IDX.OR]            = "OR".ToLower();
             KEYS[IDX.NOT]           = "NOT".ToLower();
             KEYS[IDX.IF]            = "IF".ToLower();
+            KEYS[IDX.DO]            = "DO".ToLower();
             KEYS[IDX.ELIF]          = "ELIF".ToLower();
             KEYS[IDX.ELSE]          = "ELSE".ToLower();
             KEYS[IDX.FOR]           = "FOR".ToLower();
@@ -28,17 +29,20 @@ namespace Common.Data {
             KEYS[IDX.WHILE]         = "WHILE".ToLower();
             KEYS[IDX.DEF]           = "DEF".ToLower();
             KEYS[IDX.FUN]           = "FUN".ToLower();
-            KEYS[IDX.DO]            = "DO".ToLower();
             KEYS[IDX.END]           = "END".ToLower();
             KEYS[IDX.RETURN]        = "RETURN".ToLower();
             KEYS[IDX.CONTINUE]      = "CONTINUE".ToLower();
             KEYS[IDX.BREAK]         = "BREAK".ToLower();
             KEYS[IDX.PFUN]          = "||";
         }
+        public static bool IsKey(int ikey) {
+            if (ikey < KEYS.Length) return true;
+            return false;
+        }
 
         public static class IDX { // Reserved Identifier
-            public static int SIZE_KEY = 0; //18;
-            public readonly static int
+            public static uint SIZE_KEY = 0; //18;
+            public readonly static uint
                 // Reserved Native Words
                 LET                 = IDX.SIZE_KEY++,
                 AND                 = IDX.SIZE_KEY++,
