@@ -16,6 +16,7 @@ namespace Common.Environment {
 
             while (line != ":q") {
                 if (line != "") {
+                    DateTime inicio = DateTime.Now;
                     LexerTokens lr = Runner.RunLexer("\"terminal " + Runner.prompt + "\"", line);
                     if (lr.Error != null) {
                         Console.WriteLine(lr);
@@ -43,6 +44,8 @@ namespace Common.Environment {
                             }
                         }
                     }
+                    TimeSpan duracao = DateTime.Now - inicio;
+                    Console.WriteLine($"Time spent: {duracao.TotalMilliseconds} ms");
                 }
                 line = ReadLine();
             }
