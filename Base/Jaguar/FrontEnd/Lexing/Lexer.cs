@@ -217,7 +217,7 @@ namespace FrontEnd.Lexing {
         }
         private void Comments() {
             this.Next();
-            while (this.Current != '\n')
+            while (this.Current!=null && this.Current != '\n')
               this.Next();
             this.Next();
         }
