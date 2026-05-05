@@ -38,8 +38,10 @@ namespace Common.Data {
             this.GenCode(this.Name, args);
             if (!TFun.mem.TryGetValue(this.hashCode, out value)) {
                 value = managerRunner.Registry(this.BodyNode.Visit(newMemory));
+                if (value == null && managerRunner.FuncReturn != null)
+                    value = managerRunner.FuncReturn;
                 TFun.mem.Add(this.hashCode, value);
-            }
+            } else return managerRunner.Success(value);
             this.Value = value;
             if ((managerRunner.NeedReturn) && managerRunner.FuncReturn == null) return managerRunner;
 

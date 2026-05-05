@@ -123,7 +123,7 @@ namespace Common.Data {
             TValue element;// = null;
             try {
                 TList l = (TList)lista;
-                float? num = ((TNumber)index).VAL;
+                double? num = ((TNumber)index).VAL;
                 int i = num != null ? ((int)num) : -1; //Notar que num pode ser float, de modo que a parte inteira eh usada
                 element = (TValue)l.VAL[i];
                 l.VAL.RemoveAt(i);

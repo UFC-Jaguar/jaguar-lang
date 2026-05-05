@@ -5,13 +5,13 @@ using System;
 namespace Common.Data {
     [Serializable()]
     public class TNumber : TValue {
-        public float? VAL = null;//default;
-        public override object Value { get { return this.VAL; } set { this.VAL = (float?)value; } }
+        public double? VAL = null;//default;
+        public override object Value { get { return this.VAL; } set { this.VAL = (double?)value; } }
 
-        public TNumber(float? value):base() {
+        public TNumber(double? value):base() {
             this.VAL = value;
         }
-        public TNumber(float? value, JMemory _memory) : this(value) {
+        public TNumber(double? value, JMemory _memory) : this(value) {
             this.memory = _memory;
         }
         public TNumber(TError e):base() {
@@ -51,7 +51,7 @@ namespace Common.Data {
             if (other.GetType() == typeof(TNumber)) {
                 double a = (double)this.VAL;
                 double b = (double)((TNumber)other).VAL;
-                return new TNumber((float) Math.Pow(a,b), this.memory);
+                return new TNumber((double) Math.Pow(a,b), this.memory);
             }
             return new TNumber(this.IllegalOp(other), this.memory);
         }
@@ -105,7 +105,7 @@ namespace Common.Data {
         }
         public override TValue And(TValue other) {
             if (other.GetType() == typeof(TNumber)) {
-                float? test = this.VAL!=null && ((TNumber)other).VAL!=null ? 1 : 0;
+                double? test = this.VAL!=null && ((TNumber)other).VAL!=null ? 1 : 0;
                 test = test==1 && (this.VAL != 0 && ((TNumber)other).VAL != 0) ? ((TNumber)other).VAL : 0;
                 TNumber num = new TNumber(test);
                 num.SetMemory(this.memory);
@@ -115,7 +115,7 @@ namespace Common.Data {
         }
         public override TValue Or(TValue other) {
             if (other.GetType() == typeof(TNumber)) {
-                float? test = testing(this.VAL);
+                double? test = testing(this.VAL);
                 test = test!=0? test : testing(((TNumber)other).VAL);
                 TNumber num = new TNumber(test);
                 num.SetMemory(this.memory);
@@ -123,7 +123,7 @@ namespace Common.Data {
             }
             return new TNumber(this.IllegalOp(other), this.memory);
         }
-        private float? testing(float? f) { return f != null && f != 0 ? f : 0; }
+        private double? testing(double? f) { return f != null && f != 0 ? f : 0; }
 
 	    public override TValue Not(){
             TNumber num = new TNumber(this.VAL == 0 ? 1 : 0);
