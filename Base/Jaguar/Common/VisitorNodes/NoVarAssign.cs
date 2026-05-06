@@ -15,15 +15,15 @@ namespace Common.Nodes {
         public override string ToString() {
             return "("+this.VarNameTOK.ToString() + ", = ," + this.ExpValue.ToString()+")";
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             string varName = this.VarNameTOK.Value;
-            TValue value = manager.Registry(this.ExpValue.Visit(memory));
+            TValue value = manager.update_and_get_value(this.ExpValue.Visit(memory));
             if (manager.NeedReturn) return manager;
 
             memory.SymbolTable.Set(varName, value);
             this.Value = value;
-            return manager.Success(value);
+            return manager.SetDefaultAndNewTValue(value);
         }
     }
 }

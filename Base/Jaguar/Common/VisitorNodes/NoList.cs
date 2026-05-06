@@ -10,17 +10,17 @@ namespace Common.Nodes {
             this.NOIni = scIni;
             this.NOEnd = scEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             var elements = new List<TValue>();
 
             foreach (Visitor visitorNode in this.Elements) {
-                elements.Add(manager.Registry(visitorNode.Visit(memory)));
+                elements.Add(manager.update_and_get_value(visitorNode.Visit(memory)));
                 if (manager.NeedReturn) return manager;
             }
             var list = new TList(elements);
             this.Value = list;
-            return manager.Success(
+            return manager.SetDefaultAndNewTValue(
               list.SetMemory(memory).SetLocation(this.NOIni, this.NOEnd)
             );
         }

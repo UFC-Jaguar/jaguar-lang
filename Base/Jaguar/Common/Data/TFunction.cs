@@ -12,18 +12,18 @@ namespace Common.Data {
 		    ArgNames = _argNames;
             this.NeedAutoReturn = needAutoReturn;
         }
-        public override MemoryManager Run(TValue[] args){
-            MemoryManager managerRunner = new MemoryManager();
+        public override DataFlow Run(TValue[] args){
+            DataFlow managerRunner = new DataFlow();
             JMemory newMemory = this.GenerateNewMemory();
-            managerRunner.Registry(this.CheckAndPopulateArgs(this.ArgNames, args, newMemory));
+            managerRunner.update_and_get_value(this.CheckAndPopulateArgs(this.ArgNames, args, newMemory));
             if (managerRunner.NeedReturn) return managerRunner;
-            TValue value = managerRunner.Registry(this.BodyNode.Visit(newMemory));
+            TValue value = managerRunner.update_and_get_value(this.BodyNode.Visit(newMemory));
             if ((managerRunner.NeedReturn) && managerRunner.FuncReturn == null) return managerRunner;
 
             TValue retValue = this.NeedAutoReturn ? value:
                 (managerRunner.FuncReturn!=null? managerRunner.FuncReturn : Consts.Number.Null);
             this.Value = retValue;
-            return managerRunner.Success(retValue);
+            return managerRunner.SetDefaultAndNewTValue(retValue);
         }
 	    public override TValue Copy() {
             TFunction copy = new TFunction(this.EmbeddedFunctionName, this.BodyNode, this.ArgNames, this.NeedAutoReturn);

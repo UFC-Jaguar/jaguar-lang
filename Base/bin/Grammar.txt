@@ -1,19 +1,19 @@
 ﻿### READ-ME ###
-### KEY:X, define X "value" as reserved word
+### @X, define X "value" as reserved word
 ### include("file_name.jg"), run expressions from "file_name.jg"
 
 ### TODO ###:
 # <Program>       ::= NEWLINE* <Includes> <Statements>
-# <Includes>      ::= {KEY:INCLUDE LPAR ID DOT EXTENSION RPAR [NEWLINE*]}
+# <Includes>      ::= {@INCLUDE LPAR ID DOT EXTENSION RPAR [NEWLINE*]}
 ###############
 
 <Statements>    ::= {NEWLINE} <Stm> {{NEWLINE}+ <Stm>} {NEWLINE}
-<Stm>           ::= KEY:RETURN [<Exp>]
-                ::= KEY:CONTINUE
-                ::= KEY:BREAK
+<Stm>           ::= @RETURN [<Exp>]
+                ::= @CONTINUE
+                ::= @BREAK
                 ::= <Exp>
-<Exp>           ::= [KEY:LET] ID EQ <Exp>
-                ::= <LogicExp> {(KEY:AND|KEY:OR) <LogicExp>}
+<Exp>           ::= [@LET] ID EQ <Exp>
+                ::= <LogicExp> {(@AND|@OR) <LogicExp>}
 <LogicExp>      ::= NOT <LogicExp>
                 ::= <ArithExp> {(EE|LT|GT|LTE|GTE) <ArithExp>}
 <ArithExp>      ::= <Term> {(PLUS|MINUS) <Term>}
@@ -24,7 +24,7 @@
 <AtomCall>      ::= <Atom> [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]   |   <PAtomCall>
 
 #TODO: Parallel Resources. This feature not defined yet, but the functions below run like a test.
-<PAtomCall>     ::= KEY:PFUN DOT <ParallelFun>
+<PAtomCall>     ::= @PFUN DOT <ParallelFun>
 <ParallelFun>   ::= (sum  | scatter) [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]
 
 <Atom>          ::= INT|FLOAT|STRING|ID|<TupleExp>|
@@ -40,15 +40,15 @@
                       |  {COMMA <Exp>}  # Set
                     )
 
-<IfCase>::= <Exp> KEY:DO <Statements> (KEY:END | <IfElif> | <IfElse>)
-<IfExp> ::= KEY:IF   <IfCase>
-<IfElif>  ::= KEY:ELIF <IfCase>
-<IfElse>  ::= KEY:ELSE <Statements> KEY:END
+<IfExp>     ::= @IF   <IfBody>
+<IfBody>    ::= <Exp> <Statements> (@END | <IfElsif> | <IfElse>)
+<IfElsif>   ::= @ELSIF <IfBody>
+<IfElse>    ::= @ELSE <Statements> @END
 
-<ForExp>        ::= KEY:FOR ID EQ <Exp> KEY:TO <Exp>  [KEY:STEP <Exp>] KEY:DO  <Stm>   |  (NEWLINE <Statements> KEY:END)
-<WhileExp>      ::= KEY:WHILE <Exp> KEY:DO  <Stm>  |  (NEWLINE <Statements> KEY:END)
-<FuncDef>       ::= KEY:DEF [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> KEY:END) )
-<FuncFun>       ::= KEY:FUN [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> KEY:END) )
+<ForExp>        ::= @FOR ID EQ <Exp> @TO <Exp>  [@STEP <Exp>] @DO  <Stm>   |  (NEWLINE <Statements> @END)
+<WhileExp>      ::= @WHILE <Exp> @DO  <Stm>  |  (NEWLINE <Statements> @END)
+<FuncDef>       ::= @DEF [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> @END) )
+<FuncFun>       ::= @FUN [ID]  LPAR  [  ID {COMMA ID}  ]  RPAR  ( (ARROW <Exp>)  |  (NEWLINE <Statements> @END) )
 
 where,
     {x} ------------------------ x repeat zero or more times, no choice
@@ -77,19 +77,19 @@ where,
     ARROW ---------------------- it's a symbol like ->
     ############################################################
     KEYWORDS BELOW ARE RESERVED WORD:
-    KEY:RETURN    -------------- it's reserved word return
-    KEY:CONTINUE  -------------- it's reserved word continue
-    KEY:BREAK     -------------- it's reserved word break
-    KEY:PFUN      -------------- it's reserved word ||
-    KEY:INCLUDE   -------------- it's reserved word include
-    KEY:FOR       -------------- it's reserved word for
-    KEY:WHILE     -------------- it's reserved word while
-    KEY:DEF       -------------- it's reserved word def
-    KEY:TO        -------------- it's reserved word to
-    KEY:DO        -------------- it's reserved word do
-    KEY:STEP      -------------- it's reserved word step
-    KEY:END       -------------- it's reserved word end
-    KEY:OR        -------------- it's reserved word or
-    KEY:AND       -------------- it's reserved word and
-    KEY:LET       -------------- it's reserved word let
+    @RETURN    -------------- it's reserved word return
+    @CONTINUE  -------------- it's reserved word continue
+    @BREAK     -------------- it's reserved word break
+    @PFUN      -------------- it's reserved word ||
+    @INCLUDE   -------------- it's reserved word include
+    @FOR       -------------- it's reserved word for
+    @WHILE     -------------- it's reserved word while
+    @DEF       -------------- it's reserved word def
+    @TO        -------------- it's reserved word to
+    @DO        -------------- it's reserved word do
+    @STEP      -------------- it's reserved word step
+    @END       -------------- it's reserved word end
+    @OR        -------------- it's reserved word or
+    @AND       -------------- it's reserved word and
+    @LET       -------------- it's reserved word let
 

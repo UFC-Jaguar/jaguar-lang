@@ -22,7 +22,7 @@ namespace FrontEnd.Parsing {
                 this.Error = ast.Error;
             return ast.Node;
         }
-        public Visitor TryRegister(AstInfo ast){ // Um lookahead para statements 
+        public Visitor getNullIfError_YouCanBackTraking(AstInfo ast){ // Um lookahead para statements 
           if (ast.Error!=null){
             this.ToReverseCount = ast.LookAhead; // retornar a contagem que foi avancada
             return null;

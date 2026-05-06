@@ -18,12 +18,12 @@ namespace FrontEnd.Grammar {
 		    if (ast.Error!=null) 
                 return ast;
 
-		    if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.DO])) {
-                return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                    "Expected '" + Consts.KEYS[Consts.IDX.DO] + "'"
-                ));
-            }
-		    parser.NextToken(ast);
+		    //if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.DO])) {
+            //    return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+            //        "Expected '" + Consts.KEYS[Consts.IDX.DO] + "'"
+            //    ));
+            //}
+		    //parser.NextToken(ast);
 
             /* Multilines */
             if (parser.Current.Type == Consts.NEWLINE){
@@ -45,7 +45,15 @@ namespace FrontEnd.Grammar {
             Visitor stm = ast.Registry(new Stm().Rule(parser)); // Inline
 		    if (ast.Error!=null) 
                 return ast;
-		    return ast.Success(new NoWhile(condition, stm, false));
+
+            if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.END])) {
+                return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+                  "Expected '" + Consts.KEYS[Consts.IDX.END] + "'"
+                ));
+            }
+            parser.NextToken(ast);
+            
+            return ast.Success(new NoWhile(condition, stm, false));
         }
     }
 }

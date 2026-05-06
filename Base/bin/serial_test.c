@@ -3,11 +3,11 @@ def ola()
 end
 
 def ifibo(n)
-  if (n < 2) do return n end
+  if (n < 2) return n end
   let a = 0
   let b = 1
   let c = a + b
-  for i = 1 to n do
+  for i = 1 to n
     let c = a + b
     let a = b
     let b = c
@@ -16,7 +16,7 @@ def ifibo(n)
 end
 
 def rfibo(n)
-  if (n < 2) do return n end
+  if (n < 2) return n end
   return rfibo(n - 1) + rfibo(n - 2)
 end
 
@@ -36,15 +36,15 @@ print("iFibo(" + n + ") = " + ifibo(n))
 print("Recursivo, Fibo(" + n + ")=" + ifibo(n))
 print("Oi!!!")
 
-def fibo(n); let a = 0; let b = 1; let c = a + b; for i = 1 to n do; let c = a + b; let a = b; let b = c; end; return c; end
+def fibo(n); let a = 0; let b = 1; let c = a + b; for i = 1 to n; let c = a + b; let a = b; let b = c; end; return c; end
 print(fibo(n))
 def test(); let num = 5; return num; end
 print(test())
 let a = []
-for i = 0 to 13 do
-    if i == 5 do
+for i = 0 to 13
+    if i == 5
         continue 
-    elif i == 9 do
+    elif i == 9
         break; 
         let a = a + i;
     end
@@ -52,11 +52,11 @@ end
 print(a)
 let a = []
 let i = 0
-while i < 13 do
+while i < 13
     let i = i + 1
-    if i == 5 do
+    if i == 5
         continue
-    elif i == 9 do
+    elif i == 9
         break
     end
     let a = a + i; 

@@ -13,8 +13,8 @@ namespace Common.Nodes {
         public override string ToString() {
             return this.VarNameTOK.ToString();
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             string varName = this.VarNameTOK.Value;
             TValue value = memory.SymbolTable.Get(varName);
 
@@ -29,7 +29,7 @@ namespace Common.Nodes {
             value.SetLocation(this.NOIni, this.NOEnd);
             value.SetMemory(memory);
             this.Value = value;
-            return manager.Success(value);
+            return manager.SetDefaultAndNewTValue(value);
         }
     }
 }

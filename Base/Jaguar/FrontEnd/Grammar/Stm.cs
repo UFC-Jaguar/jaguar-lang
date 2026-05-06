@@ -12,9 +12,13 @@ namespace FrontEnd.Grammar {
             if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.RETURN])) {
               parser.NextToken(ast);
               
-              Visitor expReturn = ast.TryRegister(new Exp().Rule(parser));
-              if (expReturn==null){
-                parser.Reverse(ast.ToReverseCount);
+              Visitor expReturn = ast.getNullIfError_YouCanBackTraking(new Exp().Rule(parser));
+              if (ast.Error != null || expReturn==null){
+                //parser.Reverse(ast.ToReverseCount);
+                string msg = "";
+                if (ast.Error != null)
+                    msg = ast.Error.ToString();
+                return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, "Syntax", msg + "\n    Stm Error"));
               }
               return ast.Success(new NoReturn(expReturn, scIni, parser.Current.NOIni.Copy()));
             }

@@ -97,8 +97,8 @@ namespace Common.Data {
           Função Run sera chamada sempre que uma funcao for executada. Isso eh sobrescrito Em TFunction, que eh um TValue
           TODO: Quais args ?, Avaliar o "porque" de MemoryManager Em FrontEnd ? Seria melhor criar a ideia de BackEnd?
         */
-        public virtual MemoryManager Run(TValue[] args) { 
-            MemoryManager manager = new MemoryManager();
+        public virtual DataFlow Run(TValue[] args) { 
+            DataFlow manager = new DataFlow();
             return manager.Fail(this.IllegalOp(null));
         }
         public virtual TValue Copy() {

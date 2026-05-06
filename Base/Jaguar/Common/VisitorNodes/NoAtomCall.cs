@@ -16,23 +16,23 @@ namespace Common.Nodes { /* TODO: Rever Tipos */
 		    else
                 this.NOEnd = this.NodeToCall.NOEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             List<TValue> args = new List<TValue>();
 
-            TValue valueToCall = manager.Registry(this.NodeToCall.Visit(memory));
+            TValue valueToCall = manager.update_and_get_value(this.NodeToCall.Visit(memory));
             if (manager.NeedReturn) return manager;
             valueToCall = valueToCall.Copy().SetLocation(this.NOIni, this.NOEnd);
 
             foreach (var arg_node in this.ArgNodes) {
-                args.Add(manager.Registry(arg_node.Visit(memory)));
+                args.Add(manager.update_and_get_value(arg_node.Visit(memory)));
                 if (manager.NeedReturn) return manager;
             }
-            TValue returnValue = manager.Registry(valueToCall.Run(args.ToArray()));
+            TValue returnValue = manager.update_and_get_value(valueToCall.Run(args.ToArray()));
             if (manager.NeedReturn) return manager;
             returnValue = returnValue.Copy().SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
             this.Value = returnValue;
-            return manager.Success(returnValue);
+            return manager.SetDefaultAndNewTValue(returnValue);
         }
     }
 }

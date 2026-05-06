@@ -13,8 +13,8 @@ namespace Common.Data {
             newMemory.SymbolTable = new JSymbolTable(newMemory.Parent.SymbolTable);
             return newMemory;
         }
-        public MemoryManager CheckArgs(string[] argNames, TValue[] args){
-            MemoryManager manager = new MemoryManager();
+        public DataFlow CheckArgs(string[] argNames, TValue[] args){
+            DataFlow manager = new DataFlow();
             if (args.Length > argNames.Length) {
                 return manager.Fail(new TRunTimeError(
                     this.NOIni, this.NOEnd,
@@ -29,7 +29,7 @@ namespace Common.Data {
                     this.memory
                 ));
             }
-            return manager.Success(null);
+            return manager.SetDefaultAndNewTValue(null);
         }
         public void PopulateArgs(string[] argNames, TValue[] args, JMemory memoryData) {
             for (int i = 0; i < args.Length; i++) {
@@ -39,12 +39,12 @@ namespace Common.Data {
                 memoryData.SymbolTable.Set(argName, argValue);
             }
         }
-        public MemoryManager CheckAndPopulateArgs(string[] argNames, TValue[] args, JMemory memoryData) {
-            MemoryManager manager = new MemoryManager();
-            manager.Registry(this.CheckArgs(argNames, args));
+        public DataFlow CheckAndPopulateArgs(string[] argNames, TValue[] args, JMemory memoryData) {
+            DataFlow manager = new DataFlow();
+            manager.update_and_get_value(this.CheckArgs(argNames, args));
             if (manager.NeedReturn) return manager;
             this.PopulateArgs(argNames, args, memoryData);
-            return manager.Success(null);
+            return manager.SetDefaultAndNewTValue(null);
         }
     }
 }

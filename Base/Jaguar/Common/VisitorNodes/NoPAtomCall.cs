@@ -41,21 +41,21 @@ namespace FrontEnd.Nodes {
             else
                 this.NOEnd = this.IDToCall.NOEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
+        public override DataFlow Visit(JMemory memory) {
             NoVarAccess node = this.IDToCall;
             string methodName = metodo;
             MethodInfo m = Util.SelectMethod(this, "visit_", methodName);
 
             object[] parameters = { memory };
-            MemoryManager valor = new MemoryManager();
+            DataFlow valor = new DataFlow();
             if (m != null) {
-                return (MemoryManager)m.Invoke(this, parameters);
+                return (DataFlow)m.Invoke(this, parameters);
             }
-            MemoryManager manager = new MemoryManager();
+            DataFlow manager = new DataFlow();
             return this.DefaultError(manager, memory, msg_scatter[2]);
         }
-        public MemoryManager visit_sum(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public DataFlow visit_sum(JMemory memory) {
+            DataFlow manager = new DataFlow();
             double valor = 0, temp = 0;
             for (int i = 0; i < ArgsVisitors.Length; i++) {
                 if (ArgsVisitors[i].GetType() == typeof(NoNumber)) {
@@ -73,16 +73,16 @@ namespace FrontEnd.Nodes {
                                          //System.Threading.Thread.Sleep(10000);
 
             TValue return_value = new TNumber(valor, memory).SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
-            return manager.Success(return_value);
+            return manager.SetDefaultAndNewTValue(return_value);
         }
-        public MemoryManager visit_ip(JMemory memory) {
-            MemoryManager rtr = new MemoryManager();
+        public DataFlow visit_ip(JMemory memory) {
+            DataFlow rtr = new DataFlow();
             TValue return_value = new TString(Util.GetLocalIPAddress(), memory).SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
-            return rtr.Success(return_value);
+            return rtr.SetDefaultAndNewTValue(return_value);
         }
         //******************************
-        public MemoryManager visit_gather(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public DataFlow visit_gather(JMemory memory) {
+            DataFlow manager = new DataFlow();
             if (ArgsVisitors.Length != 1)
                 return this.DefaultError(manager, memory, msg_gather[0]);
 
@@ -90,7 +90,7 @@ namespace FrontEnd.Nodes {
             Visitor visitor = (Visitor)ArgsVisitors[0];
             TValue tval = visitor.Value;
             if (visitor.Value.Null)
-                tval = manager.Registry(visitor.Visit(memory));
+                tval = manager.update_and_get_value(visitor.Visit(memory));
             if (!tval.Null)
                 gather_value = tval;
             TValue[] mpi_gather_values = MPIEnv.Comm_world.Gather<TValue>(gather_value, MPIEnv.Root);
@@ -98,11 +98,11 @@ namespace FrontEnd.Nodes {
             if (MPIEnv.Rank == MPIEnv.Root)
                 result = new TList(new List<TValue>(mpi_gather_values));
             MPIEnv.Comm_world.Barrier();
-            return manager.Success(result.SetLocation(this.NOIni, this.NOEnd).SetMemory(memory));
+            return manager.SetDefaultAndNewTValue(result.SetLocation(this.NOIni, this.NOEnd).SetMemory(memory));
         }
 
-        public MemoryManager visit_scatter(JMemory memory) {// scatter()
-            MemoryManager manager = new MemoryManager();
+        public DataFlow visit_scatter(JMemory memory) {// scatter()
+            DataFlow manager = new DataFlow();
             if (ArgsVisitors.Length != 1) 
                 return this.DefaultError(manager, memory, msg_scatter[0]);
 
@@ -115,7 +115,7 @@ namespace FrontEnd.Nodes {
                     foreach (Visitor v in list.Elements) {
                         TValue x = v.Value;
                         if (v.GetType() == typeof(NoVarAccess)) x = this.Valor((NoVarAccess)v, memory);
-                        else if (v.Value.Null) x = manager.Registry(v.Visit(memory));
+                        else if (v.Value.Null) x = manager.update_and_get_value(v.Visit(memory));
                         if (!x.Null) dados.Add(x);
                     }
                 }
@@ -136,15 +136,15 @@ namespace FrontEnd.Nodes {
                 object valor = MPIEnv.Comm_world.Scatter<object>(values, MPIEnv.Root);
                 MPIEnv.Comm_world.Barrier();
                 TValue num = (TValue)valor; //new TString("....", memory).SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
-                return manager.Success(num);
+                return manager.SetDefaultAndNewTValue(num);
             }
             TValue return_value = new TString(msg_scatter[0], memory).SetLocation(this.NOIni, this.NOEnd).SetMemory(memory);
-            return manager.Success(return_value);
+            return manager.SetDefaultAndNewTValue(return_value);
         }
         private TValue Valor(NoVarAccess node, JMemory memory) {
             return memory.SymbolTable.Get(node.VarNameTOK.Value);
         }
-        private MemoryManager DefaultError(MemoryManager manager, JMemory _memory, string mensagem) {
+        private DataFlow DefaultError(DataFlow manager, JMemory _memory, string mensagem) {
             var _NOIni = this.NOIni;
             if (this.ArgsVisitors.Length>1) _NOIni = this.ArgsVisitors[this.ArgsVisitors.Length-1].NOIni;
             return manager.Fail(new TRunTimeError(_NOIni, this.NOEnd, mensagem, _memory));

@@ -3,7 +3,7 @@ using Common.Nodes;
 
 namespace BackEnd {
     public class Interpreter {
-        public MemoryManager Visit(Visitor node, JMemory memory){
+        public DataFlow Visit(Visitor node, JMemory memory){
             return node.Visit(memory);
         }
     }

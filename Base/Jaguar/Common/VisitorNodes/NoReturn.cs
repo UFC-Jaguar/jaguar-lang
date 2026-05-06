@@ -8,15 +8,15 @@ namespace Common.Nodes {
             this.NOIni = scIni;
             this.NOEnd = scEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
 
             TValue value = Consts.Number.Null;
             if (this.nodeToReturn != null) {
-                value = manager.Registry(this.nodeToReturn.Visit(memory));
+                value = manager.update_and_get_value(this.nodeToReturn.Visit(memory));
                 if (manager.NeedReturn) return manager;
             }
-            return manager.SuccessReturn(value);
+            return manager.ReturnOk(value);
         }
     }
 }

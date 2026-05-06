@@ -57,13 +57,13 @@ namespace FrontEnd.Grammar {
 			    if (ast.Error!=null) return ast;
             }
 
-		    if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.DO])) {
-                return ast.Fail(new TError(
-				    parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                    "Expected '" + Consts.KEYS[Consts.IDX.DO] + "'"
-                ));
-            }
-            parser.NextToken(ast);
+		    //if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.DO])) {
+            //    return ast.Fail(new TError(
+			//	    parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+            //        "Expected '" + Consts.KEYS[Consts.IDX.DO] + "'"
+            //    ));
+            //}
+            //parser.NextToken(ast);
             /* MultiLine */
             if (parser.Current.Type == Consts.NEWLINE){
               parser.NextToken(ast);
@@ -82,10 +82,18 @@ namespace FrontEnd.Grammar {
             }
             /* End MultiLine */
 
-            Visitor body = ast.Registry(new Stm().Rule(parser)); // ???
+            Visitor body = ast.Registry(new Stm().Rule(parser));
 		    if (ast.Error!=null) return ast;
 
-		    return ast.Success(new NoFOR(var_name, start_value, end_value, step_value, body, false));
+            if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.END])) {
+                return ast.Fail(new TError(
+                  parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+                  "Expected '" + Consts.KEYS[Consts.IDX.END] + "'"
+                ));
+            }
+            parser.NextToken(ast);
+
+            return ast.Success(new NoFOR(var_name, start_value, end_value, step_value, body, false));
         }
     }
 }

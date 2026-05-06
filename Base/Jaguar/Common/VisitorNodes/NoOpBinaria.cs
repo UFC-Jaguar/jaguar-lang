@@ -55,11 +55,11 @@ namespace Common.Nodes {
             return ast.Success(left);
         }
 
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
-            TValue left = manager.Registry(this.Left.Visit(memory));
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
+            TValue left = manager.update_and_get_value(this.Left.Visit(memory));
             if (manager.NeedReturn) return manager;
-            TValue right = manager.Registry(this.Right.Visit(memory));
+            TValue right = manager.update_and_get_value(this.Right.Visit(memory));
             if (manager.NeedReturn) return manager;
             TValue result = null;
             if (this.OpTok.Type == Consts.PLUS)
@@ -93,7 +93,7 @@ namespace Common.Nodes {
             if (result.Error != null) return manager.Fail(result.Error);
             result.SetMemory(memory);
             result.SetLocation(this.NOIni, this.NOEnd);
-            return manager.Success(result);
+            return manager.SetDefaultAndNewTValue(result);
         }
     }
 }

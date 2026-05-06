@@ -5,9 +5,9 @@ using FrontEnd.Parsing;
 
 namespace Common.Helpers {
     public class Running {
-        public static MemoryManager Run(string fileName, string contentFromFileName) {
+        public static DataFlow Run(string fileName, string contentFromFileName) {
             //Generate Tokens
-            var result = new MemoryManager();
+            var result = new DataFlow();
             LexerTokens tokensSet = LexerRun(fileName, contentFromFileName);
             if (tokensSet.Error != null) {
                 result.Value = null;

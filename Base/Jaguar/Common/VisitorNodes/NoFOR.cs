@@ -30,16 +30,16 @@ namespace Common.Nodes {
                 step + 
                 Body.ToString()+")";
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             var elements = new List<TValue>();
-            TValue startValue = manager.Registry(this.StartValue.Visit(memory));
+            TValue startValue = manager.update_and_get_value(this.StartValue.Visit(memory));
             if (startValue.GetType() != typeof(TNumber)) {  // TODO: Verificar depois. Casar tipos?
                 new Exception("visit ForNode: Interpreter identified exception on startValue"); 
             }
             if (manager.NeedReturn) 
                 return manager;
-            TValue endValue = manager.Registry(this.EndValue.Visit(memory));
+            TValue endValue = manager.update_and_get_value(this.EndValue.Visit(memory));
             if (endValue.GetType() != typeof(TNumber)) { 
                 new Exception("visit ForNode: Interpreter identified exception on endValue"); 
             }
@@ -49,7 +49,7 @@ namespace Common.Nodes {
             TValue stepValue = new TNumber(1);
 
             if (this.StepValue != null) {
-                stepValue = manager.Registry(this.StepValue.Visit(memory));
+                stepValue = manager.update_and_get_value(this.StepValue.Visit(memory));
                 if (manager.NeedReturn) 
                     return manager;
             }
@@ -65,7 +65,7 @@ namespace Common.Nodes {
                 memory.SymbolTable.Set(this.TokenVar.Value, new TNumber(i));
                 i += ((TNumber)stepValue).VAL;
 
-                TValue value = manager.Registry(this.Body.Visit(memory));
+                TValue value = manager.update_and_get_value(this.Body.Visit(memory));
                 if (manager.NeedReturn && manager.LoopContinue == false && manager.LoopBreak == false) 
                     return manager;
                 if (manager.LoopContinue) 
@@ -77,7 +77,7 @@ namespace Common.Nodes {
             TList l = new TList(elements);
             TValue v = this.NeedReturnNull ? Consts.Number.Null : l.SetMemory(memory).SetLocation(this.NOIni, this.NOEnd);
             this.Value = v;
-            return manager.Success(v); 
+            return manager.SetDefaultAndNewTValue(v); 
         }
     }
 }

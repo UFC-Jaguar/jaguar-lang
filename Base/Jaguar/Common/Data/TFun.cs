@@ -28,27 +28,27 @@ namespace Common.Data {
         }
 
 
-        public override MemoryManager Run(TValue[] args) {
-            MemoryManager managerRunner = new MemoryManager();
+        public override DataFlow Run(TValue[] args) {
+            DataFlow managerRunner = new DataFlow();
             JMemory newMemory = this.GenerateNewMemory();
-            managerRunner.Registry(this.CheckAndPopulateArgs(this.ArgNames, args, newMemory));
+            managerRunner.update_and_get_value(this.CheckAndPopulateArgs(this.ArgNames, args, newMemory));
             if (managerRunner.NeedReturn) return managerRunner;
 
             TValue value;
             this.GenCode(this.Name, args);
             if (!TFun.mem.TryGetValue(this.hashCode, out value)) {
-                value = managerRunner.Registry(this.BodyNode.Visit(newMemory));
+                value = managerRunner.update_and_get_value(this.BodyNode.Visit(newMemory));
                 if (value == null && managerRunner.FuncReturn != null)
                     value = managerRunner.FuncReturn;
                 TFun.mem.Add(this.hashCode, value);
-            } else return managerRunner.Success(value);
+            } else return managerRunner.SetDefaultAndNewTValue(value);
             this.Value = value;
             if ((managerRunner.NeedReturn) && managerRunner.FuncReturn == null) return managerRunner;
 
             TValue retValue = this.NeedAutoReturn ? value :
                 (managerRunner.FuncReturn != null ? managerRunner.FuncReturn : Consts.Number.Null);
             this.Value = retValue;
-            return managerRunner.Success(retValue);
+            return managerRunner.SetDefaultAndNewTValue(retValue);
         }
         public override TValue Copy() {
             TFun copy = new TFun(this.EmbeddedFunctionName, this.BodyNode, this.ArgNames, this.NeedAutoReturn);

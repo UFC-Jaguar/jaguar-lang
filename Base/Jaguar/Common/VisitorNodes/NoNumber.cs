@@ -14,11 +14,11 @@ namespace Common.Nodes {
         public override string ToString() {
             return Tok.ToString();
         }
-        public override MemoryManager Visit(JMemory memory) {
+        public override DataFlow Visit(JMemory memory) {
             this.Value.SetMemory(memory);
             this.Value.SetLocation(this.NOIni, this.NOEnd);
-            MemoryManager manager = new MemoryManager();
-            manager.Success(this.Value);
+            DataFlow manager = new DataFlow();
+            manager.SetDefaultAndNewTValue(this.Value);
             return manager;
         }
     }

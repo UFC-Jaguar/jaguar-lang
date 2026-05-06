@@ -14,6 +14,9 @@ namespace Common.Data {
         private readonly static string[] _KEYS = new string[IDX.SIZE_KEY];
         public static string[] KEYS { get { return _KEYS;  } }
 
+        private readonly static string[] _BYPASS_STATEMENTS = new string[4];
+        public static string[] BYPASS_STATEMENTS { get { return _BYPASS_STATEMENTS; } }
+
         static Consts() {
             KEYS[IDX.LET]           = "LET".ToLower();
             KEYS[IDX.AND]           = "AND".ToLower();
@@ -34,6 +37,11 @@ namespace Common.Data {
             KEYS[IDX.CONTINUE]      = "CONTINUE".ToLower();
             KEYS[IDX.BREAK]         = "BREAK".ToLower();
             KEYS[IDX.PFUN]          = "||";
+
+            BYPASS_STATEMENTS[0] = KEYS[IDX.DO];
+            BYPASS_STATEMENTS[1] = KEYS[IDX.END];
+            BYPASS_STATEMENTS[2] = KEYS[IDX.ELIF];
+            BYPASS_STATEMENTS[3] = KEYS[IDX.ELSE];
         }
         public static bool IsKey(int ikey) {
             if (ikey < KEYS.Length) return true;

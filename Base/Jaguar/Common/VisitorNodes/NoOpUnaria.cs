@@ -14,9 +14,9 @@ namespace Common.Nodes {
         public override string ToString() {
             return "(" + OP + ", " + NO + ")";
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
-            TValue num = manager.Registry(this.NO.Visit(memory));
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
+            TValue num = manager.update_and_get_value(this.NO.Visit(memory));
             if (manager.NeedReturn)
                 return manager;
 
@@ -30,7 +30,7 @@ namespace Common.Nodes {
 
             num.SetMemory(memory);
             num.SetLocation(this.NOIni, this.NOEnd);
-            return manager.Success(num);
+            return manager.SetDefaultAndNewTValue(num);
         }
     }
 }

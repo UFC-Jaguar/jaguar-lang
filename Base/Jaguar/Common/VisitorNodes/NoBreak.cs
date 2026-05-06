@@ -6,8 +6,8 @@ namespace Common.Nodes {
             this.NOIni = scIni;
             this.NOEnd = scEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            return new MemoryManager().SuccessBreak();
+        public override DataFlow Visit(JMemory memory) {
+            return new DataFlow().BreakOk();
         }
     }
 }

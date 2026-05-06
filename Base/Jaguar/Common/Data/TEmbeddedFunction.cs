@@ -11,19 +11,19 @@ namespace Common.Data {
     public class TEmbeddedFunction : TBaseFunction {
         public TEmbeddedFunction(string _functionName) : base(_functionName) { }
 
-        public override MemoryManager Run(TValue[] args) {
-            MemoryManager managerRunner = new MemoryManager();
+        public override DataFlow Run(TValue[] args) {
+            DataFlow managerRunner = new DataFlow();
             JMemory newMemory = this.GenerateNewMemory();
 
             MethodInfo m = Util.SelectMethod(this, Consts.EmbeddedFunction.INI, this.EmbeddedFunctionName);
             object[] parameters = { newMemory };
-            managerRunner.Registry(this.CheckAndPopulateArgs(Consts.ArgNames.Get(this.EmbeddedFunctionName), args, newMemory));
+            managerRunner.update_and_get_value(this.CheckAndPopulateArgs(Consts.ArgNames.Get(this.EmbeddedFunctionName), args, newMemory));
             if (managerRunner.NeedReturn) return managerRunner;
             if (m != null) {
-                TValue returnValue = managerRunner.Registry((MemoryManager)m.Invoke(this, parameters));
+                TValue returnValue = managerRunner.update_and_get_value((DataFlow)m.Invoke(this, parameters));
                 if (managerRunner.NeedReturn) return managerRunner;
                 this.Value = returnValue;
-                return managerRunner.Success(returnValue);
+                return managerRunner.SetDefaultAndNewTValue(returnValue);
             }
             return managerRunner.Fail(Util.NoVisitMethod(this, newMemory, Consts.EmbeddedFunction.INI, this.EmbeddedFunctionName));
         }
@@ -37,25 +37,25 @@ namespace Common.Data {
             return "<embedded function " + this.EmbeddedFunctionName + ">";
         }
         //#####################################
-        public MemoryManager Run_print(JMemory memoryData) {
+        public DataFlow Run_print(JMemory memoryData) {
             if (MPIEnv.Rank == MPIEnv.Root) {
                 System.Console.WriteLine(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString());
             }
-            return new MemoryManager().Success(Consts.Number.Null);
+            return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null);
         }
-        public MemoryManager Run_allprint(JMemory memoryData) {
+        public DataFlow Run_allprint(JMemory memoryData) {
             System.Console.WriteLine(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString());
             MPIEnv.Comm_world.Barrier();
-            return new MemoryManager().Success(Consts.Number.Null);
+            return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null);
         }
-        public MemoryManager Run_str(JMemory memoryData) {
-            return new MemoryManager().Success( ( new Common.Data.TString(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString())  )  );
+        public DataFlow Run_str(JMemory memoryData) {
+            return new DataFlow().SetDefaultAndNewTValue( ( new Common.Data.TString(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).ToString())  )  );
         }
-        public MemoryManager Run_input(JMemory memoryData) {
+        public DataFlow Run_input(JMemory memoryData) {
             string text = Util.ReadText("### ");
-            return new MemoryManager().Success(new Common.Data.TString(text));
+            return new DataFlow().SetDefaultAndNewTValue(new Common.Data.TString(text));
         }
-        public MemoryManager Run_input_int(JMemory memoryData) {
+        public DataFlow Run_input_int(JMemory memoryData) {
             int number;// = 0;
             while (true) {
                 string text = Util.ReadText("### ");
@@ -66,55 +66,55 @@ namespace Common.Data {
                     System.Console.WriteLine("'" + text + "' must be an integer. Try again!");
                 }
             }
-            return new MemoryManager().Success(new TNumber(number));
+            return new DataFlow().SetDefaultAndNewTValue(new TNumber(number));
         }
-        public MemoryManager Run_clear(JMemory memoryData) {
+        public DataFlow Run_clear(JMemory memoryData) {
             Console.Clear();
-            return new MemoryManager().Success(Consts.Number.Null);
+            return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null);
         }
-        public MemoryManager Run_is_number(JMemory memoryData) {
+        public DataFlow Run_is_number(JMemory memoryData) {
             return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(TNumber)) ?
-                new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
+                new DataFlow().SetDefaultAndNewTValue(Consts.Number.True) : new DataFlow().SetDefaultAndNewTValue(Consts.Number.False);
         }
-        public MemoryManager Run_is_string(JMemory memoryData) {
+        public DataFlow Run_is_string(JMemory memoryData) {
             return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(Common.Data.TString)) ?
-                new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
+                new DataFlow().SetDefaultAndNewTValue(Consts.Number.True) : new DataFlow().SetDefaultAndNewTValue(Consts.Number.False);
         }
-        public MemoryManager Run_is_list(JMemory memoryData) {
+        public DataFlow Run_is_list(JMemory memoryData) {
             return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(Common.Data.TList)) ?
-                new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
+                new DataFlow().SetDefaultAndNewTValue(Consts.Number.True) : new DataFlow().SetDefaultAndNewTValue(Consts.Number.False);
         }
-        public MemoryManager Run_is_function(JMemory memoryData) {
+        public DataFlow Run_is_function(JMemory memoryData) {
             return (memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).GetType() == typeof(TBaseFunction)) ?
-                new MemoryManager().Success(Consts.Number.True) : new MemoryManager().Success(Consts.Number.False);
+                new DataFlow().SetDefaultAndNewTValue(Consts.Number.True) : new DataFlow().SetDefaultAndNewTValue(Consts.Number.False);
         }
-        public MemoryManager Run_push(JMemory memoryData) {
+        public DataFlow Run_push(JMemory memoryData) {
             TValue lista = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
             TValue value = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue);
 
             if (lista.GetType() != typeof(TList)) {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                   this.NOIni, this.NOEnd,
                   "The first argument must be a list",
                   memoryData
                 ));
             }
           ((TList)lista).VAL.Add(value);
-            return new MemoryManager().Success(lista);
+            return new DataFlow().SetDefaultAndNewTValue(lista);
         }
-        public MemoryManager Run_get(JMemory memoryData) {
+        public DataFlow Run_get(JMemory memoryData) {
             TValue lista = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
             TValue index = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KIndex);
 
             if (lista.GetType() != typeof(TList)) {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                     this.NOIni, this.NOEnd,
                     "The first argument must be a list",
                     memoryData
                 ));
             }
             if (index.GetType() != typeof(TNumber)) {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                     this.NOIni, this.NOEnd,
                     "The second argument must be a integer number (index)",
                     memoryData
@@ -128,31 +128,31 @@ namespace Common.Data {
                 element = (TValue)l.VAL[i];
                 l.VAL.RemoveAt(i);
             } catch {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                     this.NOIni, this.NOEnd,
                     "Element at this index could Not be removed from list because index is out of bounds",
                     memoryData
                 ));
             }
-            return new MemoryManager().Success(element);
+            return new DataFlow().SetDefaultAndNewTValue(element);
         }
-        public MemoryManager Run_len(JMemory memoryData) {
+        public DataFlow Run_len(JMemory memoryData) {
             TValue list_ = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
 
             if (list_.GetType() != typeof(TList)) {
-              return new MemoryManager().Fail(new TRunTimeError(
+              return new DataFlow().Fail(new TRunTimeError(
                 this.NOIni, this.NOEnd,
                 "Argument must be a list",
                 memoryData
               ));
             }
-            return new MemoryManager().Success(new TNumber(((TList)list_).VAL.Count));
+            return new DataFlow().SetDefaultAndNewTValue(new TNumber(((TList)list_).VAL.Count));
         }
-        public MemoryManager Run_include(JMemory memoryData) {
+        public DataFlow Run_include(JMemory memoryData) {
             TValue fn_ = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KFileName);
 
             if (fn_.GetType() != typeof(Common.Data.TString)) {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                   this.NOIni, this.NOEnd,
                   "The second argument must be a string",
                   memoryData
@@ -164,7 +164,7 @@ namespace Common.Data {
                 //string current_folder = System.Environment.CurrentDirectory;
                 contentFromFileName = System.IO.File.ReadAllText(fileName);
             } catch {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                   this.NOIni, this.NOEnd,
                   "Failed to load contentFromFileName \"" + fileName + "\"\n" + " :: File Not found",
                   memoryData
@@ -173,19 +173,19 @@ namespace Common.Data {
             var result = Running.Run(fileName, contentFromFileName);
 
             if (result.Error != null) {
-                return new MemoryManager().Fail(new TRunTimeError(
+                return new DataFlow().Fail(new TRunTimeError(
                   this.NOIni, this.NOEnd,
                   "Failed to finish executing contentFromFileName \"" + fileName + "\"\n" +
                   result.Error.ToString(),
                   memoryData
                 ));
             }
-            return new MemoryManager().Success(Consts.Number.Null); 
+            return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null); 
         }
 
-        public MemoryManager Run_mpi_sum(JMemory memoryData) {
+        public DataFlow Run_mpi_sum(JMemory memoryData) {
             float x = (float) ((TNumber) memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue)).Value;
-            return new MemoryManager().Success(new TNumber(x));
+            return new DataFlow().SetDefaultAndNewTValue(new TNumber(x));
         }
     }
 }
@@ -208,5 +208,5 @@ namespace Common.Data {
         ));
     }
   ((TList)listA).elements.AddRange(((TList)listB).elements);
-    return new MemoryManager().Success(listA);
+    return new MemoryManager().SetDefaultAndNewTValue(listA);
 }*/

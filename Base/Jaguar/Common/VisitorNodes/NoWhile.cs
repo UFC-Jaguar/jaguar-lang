@@ -14,17 +14,17 @@ namespace Common.Nodes {
             this.NOIni = this.ConditionVisitor.NOIni;
             this.NOEnd = this.BodyVisitor.NOEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             var elements = new List<TValue>();
 
             while (true) {
-                TValue condition = manager.Registry(this.ConditionVisitor.Visit(memory));
+                TValue condition = manager.update_and_get_value(this.ConditionVisitor.Visit(memory));
                 if (manager.NeedReturn) return manager;
 
                 if (!condition.IsTrue()) break;
 
-                TValue theValue = manager.Registry(this.BodyVisitor.Visit(memory));
+                TValue theValue = manager.update_and_get_value(this.BodyVisitor.Visit(memory));
                 //this.Value = theValue;
                 if (manager.NeedReturn && manager.LoopContinue == false && manager.LoopBreak == false) return manager;
 
@@ -36,7 +36,7 @@ namespace Common.Nodes {
             }
             TList list = new TList(elements);
             TValue value = this.NeedReturnNull ? Consts.Number.Null : list.SetMemory(memory).SetLocation(this.NOIni, this.NOEnd);
-            return manager.Success(value); 
+            return manager.SetDefaultAndNewTValue(value); 
         }
     }
 }

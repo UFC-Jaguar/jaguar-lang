@@ -1,9 +1,11 @@
-﻿using Common.Nodes;
+﻿using System.Collections.Generic;
+using Common.Nodes;
 using FrontEnd.Parsing;
 using Common.Data;
 using Common.Helpers;
 using Common.Errors;
 using FrontEnd.Lexing;
+using static Common.Data.Consts;
 
 namespace FrontEnd.Grammar {
     public class Atom: Grammar {
@@ -36,7 +38,8 @@ namespace FrontEnd.Grammar {
               if (ast.Error!=null) return ast;
               return ast.Success(listExp);
             } else if (tok.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.IF])){
-                Visitor ifExp = ast.Registry(new IfExp().Rule(parser));
+                List<NoIF.NoDataIFs> buffer = new List<NoIF.NoDataIFs>();
+                Visitor ifExp = ast.Registry(new IfExp(Consts.KEYS[Consts.IDX.IF], buffer).Rule(parser));
 			    if (ast.Error!=null) return ast;
 			    return ast.Success(ifExp);
             } else if (tok.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.FOR])){

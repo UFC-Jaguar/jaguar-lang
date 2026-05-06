@@ -1,5 +1,5 @@
 def source()
-	if manager do
+	if manager
 		return [[1,2,3],[4],[5,6],[7,8,9,10]]
 	end
 	return []
@@ -12,7 +12,7 @@ x = ||.scatter(dados)
 allprint("p" + pid + "(" + || .ip() + ") -> " + x)
 print("############# Node sum #############################")
 n = 0
-for i=0 to len(x) do
+for i=0 to len(x)
 	# NOTE: get(x,i)==x/i. In the future release (on c++), the value of list will be x!!i, like haskell
 	n = n + get(x,i)
 end
@@ -20,14 +20,14 @@ allprint("p" + pid + "(" + || .ip() + ") -> " + n)
 
 print("############## Using ||.gather(n) ##################")
 r = ||.gather(n)
-if manager do
+if manager
     g = 0
-	for i = 0 to len(r) do g = g + r/i
+	for i = 0 to len(r) g = g + r/i end
 	print("sum all and send to root -> " + g)
 end
 
 print("############### Using ||.sum(n) ####################")
 s = ||.sum(n)
-if manager do
+if manager
 	print("sum all and send to root -> " + s)
 end

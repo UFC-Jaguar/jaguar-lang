@@ -67,7 +67,7 @@
     <Compile Include="Common\Data\Node.cs" />
     <Compile Include="Common\Data\TNumber.cs" />
     <Compile Include="Common\Data\JSource.cs" />
-    <Compile Include="Common\Data\MemoryManager.cs" />
+    <Compile Include="Common\Data\DataFlow.cs" />
     <Compile Include="Common\Data\TString.cs" />
     <Compile Include="Common\Data\JSymbolTable.cs" />
     <Compile Include="Common\Data\TValue.cs" />
@@ -81,8 +81,7 @@
     <Compile Include="FrontEnd\Grammar\Atom.cs" />
     <Compile Include="FrontEnd\Grammar\AtomCall.cs" />
     <Compile Include="FrontEnd\Grammar\FuncFun.cs" />
-    <Compile Include="FrontEnd\Grammar\IfCase.cs" />
-    <Compile Include="FrontEnd\Grammar\IfElif.cs" />
+    <Compile Include="FrontEnd\Grammar\IfBody.cs" />
     <Compile Include="FrontEnd\Grammar\IfElse.cs" />
     <Compile Include="FrontEnd\Grammar\LogicExp.cs" />
     <Compile Include="FrontEnd\Grammar\Exp.cs" />

@@ -23,8 +23,8 @@ namespace Common.Nodes { // Rever Tipos
                 this.NOIni = this.BodyFunction.NOIni;
             this.NOEnd = this.BodyFunction.NOEnd;
         }
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
 
             string nameFuncValue = this.NameFunction != null ? this.NameFunction.Value : null;
             var bodyNode = this.BodyFunction;
@@ -39,7 +39,7 @@ namespace Common.Nodes { // Rever Tipos
             if (this.NameFunction != null)
                 memory.SymbolTable.Set(nameFuncValue, funcInstance);
 
-            return manager.Success(funcInstance);
+            return manager.SetDefaultAndNewTValue(funcInstance);
         }
     }
 }

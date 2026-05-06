@@ -26,6 +26,11 @@ namespace FrontEnd.Lexing {
         public bool Matches(string _type, string _value) {
             return this.Type == _type && this.Value == _value;
         }
+        public bool MatchesValues(string _type, string[] _values) {
+            if (this.Type != _type) return false;
+            foreach (string s in _values) if (this.Value == s) return true;
+            return false;
+        }
         public override string ToString() {
             if (this.Value != null)
                 return "" + this.Type + ":" + this.Value + "";

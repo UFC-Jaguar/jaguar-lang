@@ -29,53 +29,55 @@ namespace Common.Nodes {
             return sb;
         }
         
-        public static NoElse ElseInstance(Visitor n, bool b) { return new NoElse(n, b); }
+        public static NoElse ElseInstance(Visitor n) { return new NoElse(n); }
         
-        public static NoDataIFs DataIFInstance(Visitor n1, Visitor n2, bool b) { return new NoDataIFs(n1, n2, b); }
+        public static NoDataIFs DataIFInstance(Visitor n1, Visitor n2) { return new NoDataIFs(n1, n2); }
         
-        public override MemoryManager Visit(JMemory memory) {
-            MemoryManager manager = new MemoryManager();
+        public override DataFlow Visit(JMemory memory) {
+            DataFlow manager = new DataFlow();
             foreach (var tp in this.IFCases) {
                 Visitor condition = tp.Condition;
                 Visitor exp = tp.Body;
-                bool needReturnNull = tp.NeedReturn;
-                TValue conditionValue = manager.Registry(condition.Visit(memory)); //TODO: Ver isso
-                if (manager.NeedReturn) 
+                TValue conditionValue = manager.update_and_get_value(condition.Visit(memory)); //TODO: Ver isso
+                if (manager.ReFlow()) 
                     return manager;
 
                 if (conditionValue.IsTrue()) {
-                    TValue expValue = manager.Registry(exp.Visit(memory));
+                    TValue t_list_value = manager.update_and_get_value(exp.Visit(memory));
                     if (manager.NeedReturn) 
                         return manager;
-                    TValue v = needReturnNull ? Consts.Number.Null : expValue;
-                    return manager.Success(v);
+                    //TValue v = needReturnNull ? Consts.Number.Null : t_list_value;
+                    //v = t_list_value.value[len(t_list_value.value)-1] if t_list_value.value else TBase.NIL
+                    TList t_list = ((TList)t_list_value);
+                    int len = t_list.VAL.Count;
+                    TValue v = len > 0 ? t_list.VAL[len-1] : Consts.Number.Null;
+                    return manager.SetDefaultAndNewTValue(v);
                 }
             }
             if (this.Else != null) {
                 Visitor exp = this.Else.Body;
-                bool needReturnNull = this.Else.NeedReturn;
-                TValue expValue = manager.Registry(exp.Visit(memory));
-                if (manager.NeedReturn) 
+                TValue t_list_value = manager.update_and_get_value(exp.Visit(memory));
+                if (manager.ReFlow()) 
                     return manager;
-                TValue v = needReturnNull ? Consts.Number.Null : expValue;
-                return manager.Success(v);
+                //TValue v = needReturnNull ? Consts.Number.Null : t_list_value;
+                TList t_list = ((TList)t_list_value);
+                int len = t_list.VAL.Count;
+                TValue v = len > 0 ? t_list.VAL[len - 1] : Consts.Number.Null;
+                return manager.SetDefaultAndNewTValue(v);
             }
-            return manager.Success(Consts.Number.Null);
+            return manager.SetDefaultAndNewTValue(Consts.Number.Null);
         }
         //################################################ VAL ELSE:
         public class NoElse {
-            public Visitor Body { get; set; } 
-            public bool NeedReturn { get; set; } 
-
-            public NoElse(Visitor body, bool need_return) {
+            public Visitor Body { get; set; }
+            public NoElse(Visitor body) {
                 this.Body = body;
-                this.NeedReturn = need_return;
             }
         }
         //################################################ VAL ELIF:
         public class NoDataIFs : NoElse { 
             public Visitor Condition { get; set; } 
-            public NoDataIFs(Visitor condition, Visitor body, bool need_return):base(body, need_return) { 
+            public NoDataIFs(Visitor condition, Visitor body):base(body) { 
                 this.Condition = condition;
             }
         }

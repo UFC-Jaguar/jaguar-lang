@@ -28,7 +28,7 @@ namespace Common.Environment {
                         } else {
                             //Console.WriteLine(pr);
                             Interpreter interpreter = new Interpreter();
-                            MemoryManager resultado = interpreter.Visit(pr.Node, memory);//var resultado = interpreter.Visit(pr.VAL);
+                            DataFlow resultado = interpreter.Visit(pr.Node, memory);//var resultado = interpreter.Visit(pr.VAL);
                             if (resultado.Error != null) {
                                 if (MPIEnv.Rank == MPIEnv.Root)
                                     Console.WriteLine("VAL(" + MPIEnv.Rank + "): " + resultado.Error);
