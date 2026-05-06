@@ -56,19 +56,19 @@ namespace FrontEnd.Nodes {
         }
         public MemoryManager visit_sum(JMemory memory) {
             MemoryManager manager = new MemoryManager();
-            float valor = 0, temp = 0;
+            double valor = 0, temp = 0;
             for (int i = 0; i < ArgsVisitors.Length; i++) {
                 if (ArgsVisitors[i].GetType() == typeof(NoNumber)) {
                     NoNumber numero = (NoNumber)ArgsVisitors[i];
-                    temp = float.Parse(numero.Tok.Value);
+                    temp = double.Parse(numero.Tok.Value);
                 } else {
                     NoVarAccess van = (NoVarAccess)ArgsVisitors[i];
                     TValue val = memory.SymbolTable.Get(van.VarNameTOK.Value);
-                    temp = (float)((TNumber)val).Value;
+                    temp = (double)((TNumber)val).Value;
                 }
                 valor += temp;
             }
-            valor = MPIEnv.Comm_world.Reduce<float>(valor, Operation<float>.Add, MPIEnv.Root);
+            valor = MPIEnv.Comm_world.Reduce<double>(valor, Operation<double>.Add, MPIEnv.Root);
             MPIEnv.Comm_world.Barrier(); // Tarefas vao aguardar aqui
                                          //System.Threading.Thread.Sleep(10000);
 
