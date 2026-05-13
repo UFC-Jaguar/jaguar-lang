@@ -67,14 +67,14 @@ namespace Common.Nodes {
             }
             return manager.SetDefaultAndNewTValue(Consts.Number.Null);
         }
-        //################################################ VAL ELSE:
+        //################################################ MAT ELSE:
         public class NoElse {
             public Visitor Body { get; set; }
             public NoElse(Visitor body) {
                 this.Body = body;
             }
         }
-        //################################################ VAL ELIF:
+        //################################################ MAT ELIF:
         public class NoDataIFs : NoElse { 
             public Visitor Condition { get; set; } 
             public NoDataIFs(Visitor condition, Visitor body):base(body) { 

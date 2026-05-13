@@ -10,7 +10,6 @@ namespace Common.Data {
         public override object Value { get { return this.VAL; } set { this.VAL = (string)value; } }
 
         public TString(string value):base() {
-            if (value == null) Console.WriteLine("ERRO estranho");
             this.VAL = value;
         }
         public TString(string value, JMemory _memory) : this(value) {

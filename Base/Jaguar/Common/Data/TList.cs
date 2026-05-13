@@ -61,7 +61,7 @@ namespace Common.Data {
                 try{
                     int i = o.VAL != null ? (int)o.VAL : 0;
                     if (i < 0) i = i + this.VAL.Count;
-                    return (TValue) this.VAL[i];// TODO: ideia [o.VAL], Nulo; Este Cast pode falhar? Avaliar a questão do TValue pai de todos
+                    return (TValue) this.VAL[i];// TODO: ideia [o.MAT], Nulo; Este Cast pode falhar? Avaliar a questão do TValue pai de todos
                 } catch {
                     this.Error = new TRunTimeError(
                         o.NOIni, o.NOEnd,
@@ -99,7 +99,7 @@ namespace Common.Data {
             return s + "]";
         }
         /*public override object Val() {
-            return this.VAL;
+            return this.MAT;
         }*/
     }
 }

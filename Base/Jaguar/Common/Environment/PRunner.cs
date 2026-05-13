@@ -28,10 +28,10 @@ namespace Common.Environment {
                         } else {
                             //Console.WriteLine(pr);
                             Interpreter interpreter = new Interpreter();
-                            DataFlow resultado = interpreter.Visit(pr.Node, memory);//var resultado = interpreter.Visit(pr.VAL);
+                            DataFlow resultado = interpreter.Visit(pr.Node, memory);//var resultado = interpreter.Visit(pr.MAT);
                             if (resultado.Error != null) {
                                 if (MPIEnv.Rank == MPIEnv.Root)
-                                    Console.WriteLine("VAL(" + MPIEnv.Rank + "): " + resultado.Error);
+                                    Console.WriteLine("MAT(" + MPIEnv.Rank + "): " + resultado.Error);
                             } else {
                                 if (resultado.Value != null && resultado.Value.GetType() == typeof(TList)) {
                                     TList v = (TList)resultado.Value;

@@ -83,7 +83,7 @@ namespace FrontEnd.Lexing {
                 } else if (this.Current == ',') {
                     tokens.Add(new Token(Consts.COMMA, null, this.Source));
                     this.Next();
-                } else if (this.Current == 65279) {// TODO: Erro de char: Unicode Character 'ZERO WIDTH VAL-BREAK SPACE'(U + FEFF)
+                } else if (this.Current == 65279) {// TODO: Erro de char: Unicode Character 'ZERO WIDTH MAT-BREAK SPACE'(U + FEFF)
                     this.Next();
                 } else {
                     JSource NoIni = this.Source.Copy();

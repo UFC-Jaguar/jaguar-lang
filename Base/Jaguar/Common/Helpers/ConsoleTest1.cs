@@ -12,7 +12,7 @@ namespace Common.Helpers {
                 ConsoleColor newForeColor = ConsoleColor.White;
                 ConsoleColor newBackColor = ConsoleColor.Black;
 
-                Char foreColorSelection = GetKeyPress("Select Text Color (B for Blue, R for Red, Y for Yellow): ",
+                Char foreColorSelection = GetKeyPress("Select Text Color (B for Blue, Row for Red, Y for Yellow): ",
                                                      new Char[] { 'B', 'R', 'Y' });
                 switch (foreColorSelection) {
                     case 'B':
@@ -28,7 +28,7 @@ namespace Common.Helpers {
                         newForeColor = ConsoleColor.DarkYellow;
                         break;
                 }
-                Char backColorSelection = GetKeyPress("Select Background Color (W for White, G for Green, M for Magenta): ",
+                Char backColorSelection = GetKeyPress("Select Background Color (W for White, G for Green, Col for Magenta): ",
                                                      new Char[] { 'W', 'G', 'M' });
                 switch (backColorSelection) {
                     case 'W':
@@ -53,7 +53,7 @@ namespace Common.Helpers {
                 Console.BackgroundColor = newBackColor;
                 Console.WriteLine(textToDisplay);
                 Console.WriteLine();
-                if (Char.ToUpper(GetKeyPress("Display another message (Y/N): ", new Char[] { 'Y', 'N' })) == 'N')
+                if (Char.ToUpper(GetKeyPress("Display another message (Y/Row): ", new Char[] { 'Y', 'N' })) == 'N')
                     continueFlag = false;
 
                 // Restore the default settings And CLEAR the screen.

@@ -52,6 +52,7 @@
     <Compile Include="Common\Data\TFun.cs" />
     <Compile Include="Common\Data\TFunction.cs" />
     <Compile Include="BackEnd\Interpreter.cs" />
+    <Compile Include="Common\Data\TMatrix.cs" />
     <Compile Include="Common\Environment\MPIEnv.cs" />
     <Compile Include="Common\Environment\PRunner.cs" />
     <Compile Include="Common\Environment\Runner.cs" />
