@@ -37,6 +37,11 @@ namespace FrontEnd.Grammar {
                 Visitor listExp = ast.Registry(new ListExp().Rule(parser)); 
               if (ast.Error!=null) return ast;
               return ast.Success(listExp);
+
+            } else if (tok.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.MATRIX])) {
+                Visitor matrixExp = ast.Registry(new MatrixExp().Rule(parser)); 
+              if (ast.Error!=null) return ast;
+              return ast.Success(matrixExp);
             } else if (tok.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.IF])){
                 List<NoIF.NoDataIFs> buffer = new List<NoIF.NoDataIFs>();
                 Visitor ifExp = ast.Registry(new IfExp(Consts.KEYS[Consts.IDX.IF], buffer).Rule(parser));

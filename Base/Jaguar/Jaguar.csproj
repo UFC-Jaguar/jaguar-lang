@@ -58,6 +58,7 @@
     <Compile Include="Common\Environment\Runner.cs" />
     <Compile Include="Common\Environment\SRunner.cs" />
     <Compile Include="Common\VisitorNodes\NoFuncFun.cs" />
+    <Compile Include="Common\VisitorNodes\NoMatrix.cs" />
     <Compile Include="Common\VisitorNodes\NoPAtomCall.cs" />
     <Compile Include="Common\VisitorNodes\Visitor.cs" />
     <Compile Include="Common\Data\TBaseFunction.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="FrontEnd\Grammar\IfExp.cs" />
     <Compile Include="FrontEnd\Grammar\Grammar.cs" />
     <Compile Include="FrontEnd\Grammar\ListExp.cs" />
+    <Compile Include="FrontEnd\Grammar\MatrixExp.cs" />
     <Compile Include="FrontEnd\Grammar\PAtomCall.cs" />
     <Compile Include="FrontEnd\Grammar\Pow.cs" />
     <Compile Include="FrontEnd\Grammar\Statements.cs" />

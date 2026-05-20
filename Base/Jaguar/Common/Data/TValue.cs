@@ -111,7 +111,7 @@ namespace Common.Data {
             if (other == null) other = this;
             return new TRunTimeError(
                 this.NOIni, other.NOEnd,
-                "Illegal operation",
+                "Illegal operation (index)",
                 this.memory
             );
         }

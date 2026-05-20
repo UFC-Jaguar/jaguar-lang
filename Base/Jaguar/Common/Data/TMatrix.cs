@@ -24,6 +24,14 @@ namespace Common.Data {
                 len = this.Row * this.Col;
             }
             this.MAT = new double?[len];
+
+            int l1 = this.Row;
+            int c1 = this.Col;
+            for (int i = 0; i < l1; i++) {
+                for (int j = 0; j < c1; j++) {
+                    this.MAT[i * c1 + j] = 0;
+                }
+            }
         }
         public TMatrixNumber(int[] v, JMemory _memory) : this(v) {
             this.memory = _memory;
@@ -34,6 +42,37 @@ namespace Common.Data {
         }
         public TMatrixNumber(TError e, JMemory _memory):this(e) {
             this.memory = _memory;
+        }
+        public override DataFlow Run(TValue[] args) {
+            DataFlow manager = new DataFlow();
+            if (args.Length<2) return manager.Fail(this.IllegalOp(null));
+            int idx = 0;
+            double? dv = 0;
+            int n = this.MAT.GetLength(0);
+            int n_args = args.Length;
+            int[] idxs = new int[n_args-1];
+            bool ok = true;
+            for (int k = 0; k < n_args - 1; k++) {
+                try {
+                    ok = args[k].GetType() == typeof(TNumber) && ok;
+                    idxs[k] = (int)(double?)args[k].Value;
+                } catch (Exception ex) {
+                    return manager.Fail(this.IllegalOp(null));
+                }
+            }
+            try {
+                ok = args[n_args-1].GetType() == typeof(TNumber) && ok;
+                dv = (double?)args[n_args-1].Value;
+            } catch (Exception ex) {
+                return manager.Fail(this.IllegalOp(null));
+            }
+            idx = idxs[0];
+            if (ok && args.Length >= 3) { idx = idxs[0] * this.Col + idxs[1]; }
+            if (ok && idx < n && idx >= 0) {
+                this.MAT[idx] = dv;
+                return manager.SetDefaultAndNewTValue(this);
+            }
+            return manager.Fail(this.IllegalOp(null));// m(1,3,4)
         }
         public override TValue Add(TValue other) {
             if (other.GetType() == typeof(TMatrixNumber)) {
@@ -51,6 +90,9 @@ namespace Common.Data {
                     return c;
                 }
             }
+            //if (other.GetType() == typeof(TNumber)) {
+            //    return new TMatrixNumber(this.VAL + ((TNumber)other).VAL, this.memory);
+            //}
             return new TMatrixNumber(this.IllegalOp(other), this.memory);
         }
         public override TValue Sub(TValue other) {

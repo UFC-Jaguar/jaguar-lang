@@ -5,7 +5,7 @@ def source()
 	return []
 end
 dados = source()
-#allprint("p"+pid+"("+||.ip() + ") -> " + dados)
+//allprint("p"+pid+"("+||.ip() + ") -> " + dados)
 
 print("################## Scatter #########################")
 x = ||.scatter(dados)
@@ -13,7 +13,7 @@ allprint("p" + pid + "(" + || .ip() + ") -> " + x)
 print("############# Node sum #############################")
 n = 0
 for i=0 to len(x)
-	# NOTE: get(x,i)==x/i. In the future release (on c++), the value of list will be x!!i, like haskell
+	// NOTE: get(x,i)==x/i. In the future release (on c++), the value of list will be x!!i, like haskell
 	n = n + get(x,i)
 end
 allprint("p" + pid + "(" + || .ip() + ") -> " + n)

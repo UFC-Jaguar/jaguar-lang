@@ -19,13 +19,20 @@ namespace FrontEnd.Lexing {
             this.Current = null;
             this.Current = Source.Idx < Code.Length ? Code[Source.Idx] : this.Current;
         }
+        private char? Ahead() {
+            int idx = (Source.Idx + 1);
+            char? c = null;
+            c = idx < Code.Length ? Code[idx] : c;
+            return c;
+        }
         public LexerTokens MakeTokens() {
             List<Token> tokens = new List<Token>();
 
             while (this.Current != null) {
                 if (Util.Em(this.Current, " \t")) {
                     this.Next();
-                } else if (this.Current == '#') {
+                } else if (this.Current == Consts.COMMENT[0] && this.Ahead() == Consts.COMMENT[1]) {
+                    this.Next();
                     this.Comments();
                 } else if (Util.Em(this.Current, ";\n\r\n")) {
                     tokens.Add(new Token(Consts.NEWLINE, null, this.Source));
@@ -82,6 +89,9 @@ namespace FrontEnd.Lexing {
                     tokens.Add(this.MakeGreaterThan());
                 } else if (this.Current == ',') {
                     tokens.Add(new Token(Consts.COMMA, null, this.Source));
+                    this.Next();
+                } else if (this.Current == Consts.MATRIX[0]) {
+                    tokens.Add(new Token(Consts.KEY, Consts.MATRIX, this.Source));
                     this.Next();
                 } else if (this.Current == 65279) {// TODO: Erro de char: Unicode Character 'ZERO WIDTH MAT-BREAK SPACE'(U + FEFF)
                     this.Next();

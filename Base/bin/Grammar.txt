@@ -25,13 +25,15 @@
 
 #TODO: Parallel Resources. This feature not defined yet, but the functions below run like a test.
 <PAtomCall>     ::= @PFUN DOT <ParallelFun>
-<ParallelFun>   ::= (sum  | scatter) [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]
+<ParallelFun>   ::= (sum  | scatter | gather) [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]
 
 <Atom>          ::= INT|FLOAT|STRING|ID|<TupleExp>|
-                    <SetExp>|LPAR <Exp> RPAR|<ListExp>|
+                    <SetExp>|LPAR <Exp> RPAR|<ListExp>|<MatrixExp>|
                     <IfExp>|<ForExp>|<WhileExp>|
                     <FuncDef> | <FuncFun>
 <ListExp>       ::= LSQR  [  <Exp> {COMMA <Exp>}  ]  RSQR
+<MatrixExp>     ::= @MATRIX LSQR  [  INT {COMMA INT}  ]  RSQR
+
 
 ## TODO:
 <TupleExp>      ::= LVBAR   [ <Exp> {COMMA <Exp>}               ]  RVBAR
@@ -92,4 +94,5 @@ where,
     @OR        -------------- it's reserved word or
     @AND       -------------- it's reserved word and
     @LET       -------------- it's reserved word let
+    @MATRIX    -------------- it's reserved word #
 

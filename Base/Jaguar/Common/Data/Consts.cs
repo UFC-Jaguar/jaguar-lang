@@ -9,7 +9,7 @@ namespace Common.Data {
                                       EE         = "EE",      NE         = "NE",         LT         = "LT",        
                                       GT         = "GT",      LTE        = "LTE",        GTE        = "GTE",       
                                       COMMA      = "COMMA",   ARROW      = "ARROW",      NEWLINE    = "NEWLINE",   EOF		 = "EOF",
-                                      DOT        = ".";
+                                      DOT        = ".",       COMMENT    = "//",         MATRIX     = "#";
 
         private readonly static string[] _KEYS = new string[IDX.SIZE_KEY];
         public static string[] KEYS { get { return _KEYS;  } }
@@ -37,6 +37,7 @@ namespace Common.Data {
             KEYS[IDX.CONTINUE]      = "CONTINUE".ToLower();
             KEYS[IDX.BREAK]         = "BREAK".ToLower();
             KEYS[IDX.PFUN]          = "||";
+            KEYS[IDX.MATRIX]        = Consts.MATRIX;
 
             BYPASS_STATEMENTS[0] = KEYS[IDX.DO];
             BYPASS_STATEMENTS[1] = KEYS[IDX.END];
@@ -70,7 +71,8 @@ namespace Common.Data {
                 RETURN              = IDX.SIZE_KEY++,
                 CONTINUE            = IDX.SIZE_KEY++,
                 BREAK               = IDX.SIZE_KEY++,
-                PFUN                = IDX.SIZE_KEY++;
+                PFUN                = IDX.SIZE_KEY++,
+                MATRIX              = IDX.SIZE_KEY++;
         }
         //public static TNull Null { get { return TNull.Get(); } } // Verificar se eh interessante trocar (TNumber Null por TNull Null)?
         public abstract class Number {

@@ -10,6 +10,13 @@ namespace FrontEnd.Grammar {
             AstInfo ast = new AstInfo();
             List<Visitor> statements = new List<Visitor>();
             JSource scIni = parser.Current.NOIni.Copy();
+            if(parser.Current.Type == Consts.EOF) {
+                return ast.Success(new NoList( // Uma lista de retornos
+                              statements,
+                              scIni,
+                              parser.Current.NOEnd.Copy()
+                            ));
+            }
             while (parser.Current.Type == Consts.NEWLINE) {
                 parser.NextToken(ast);
             }
