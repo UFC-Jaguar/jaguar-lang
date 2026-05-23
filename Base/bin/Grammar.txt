@@ -25,6 +25,7 @@
 
 #TODO: Parallel Resources. This feature not defined yet, but the functions below run like a test.
 <PAtomCall>     ::= @PFUN DOT <ParallelFun>
+                ::= @PFUN <Atom> @PFUN
 <ParallelFun>   ::= (sum  | scatter | gather) [LPAR  [<Exp>  {COMMA <Exp>}  ]  RPAR]
 
 <Atom>          ::= INT|FLOAT|STRING|ID|<TupleExp>|

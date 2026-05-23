@@ -113,6 +113,7 @@ namespace Common.Data {
             public static readonly string MPI_MANAGER      = "MANAGER".ToLower(); // manager/root
             public static readonly string MPI_SIZE         = "SIZE".ToLower();
             public static readonly string MPI_SUM          = "MPI_SUM".ToLower();
+            public static readonly string IS_PAR           = "IS_PAR".ToLower();
             //public static readonly string CLS            = "CLS".ToLower();
 
             // Statics objects
@@ -131,6 +132,7 @@ namespace Common.Data {
             public static readonly TEmbeddedFunction E_PUSH         = new TEmbeddedFunction(Consts.EmbeddedFunction.PUSH);
             public static readonly TEmbeddedFunction E_GET          = new TEmbeddedFunction(Consts.EmbeddedFunction.GET);
             public static readonly TEmbeddedFunction E_LEN          = new TEmbeddedFunction(Consts.EmbeddedFunction.LEN);
+            public static readonly TEmbeddedFunction E_IS_PAR       = new TEmbeddedFunction(Consts.EmbeddedFunction.IS_PAR);
             //public static readonly TEmbeddedFunction E_CONCAT_LIST= new TEmbeddedFunction(Consts.EmbeddedFunction.CONCAT_LIST);
         }
         public abstract class ArgNames {// TODO: Sempre verificar o Max, se 16 key/values datas in _values
@@ -160,6 +162,7 @@ namespace Common.Data {
                 Values[Consts.EmbeddedFunction.GET]             = new string[2] { Keys.KList, Keys.KIndex };
                 //Values[Consts.EmbeddedFunction.CONCAT_LIST]   = new string[2] { Keys.KListA, Keys.KListB }; // Exemplo: 2 listas. A linguagem já prevê isso: [1]+[2]==[1,2].
                 Values[Consts.EmbeddedFunction.INCLUDE]         = new string[1] { Keys.KFileName };
+                Values[Consts.EmbeddedFunction.IS_PAR]          = new string[1] { Keys.KValue};
             }
             public class KeysEmbed {
                 public string KValue { get { return "Value"; } }

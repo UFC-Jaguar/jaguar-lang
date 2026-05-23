@@ -29,6 +29,7 @@ namespace Common.Nodes {
             value.SetLocation(this.NOIni, this.NOEnd);
             value.SetMemory(memory);
             this.Value = value;
+            value.ParallelSet(this.ParVisitor); //Console.WriteLine("Parallel? " + value.Parallel());
             return manager.SetDefaultAndNewTValue(value);
         }
     }

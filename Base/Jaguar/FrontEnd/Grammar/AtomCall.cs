@@ -3,6 +3,7 @@ using Common.Nodes;
 using FrontEnd.Parsing;
 using Common.Data;
 using Common.Errors;
+using System;
 
 namespace FrontEnd.Grammar {
     public class AtomCall : Grammar {
@@ -55,13 +56,23 @@ namespace FrontEnd.Grammar {
         }
         public AstInfo PCALL(Parser parser, AstInfo ast) {
             parser.NextToken(ast);
+            Visitor atom;
             if (parser.Current.Type == Consts.DOT) {
                 parser.NextToken(ast);
-                Visitor atom = ast.Registry(new PAtomCall().Rule(parser));
+                atom = ast.Registry(new PAtomCall().Rule(parser));
                 if (ast.Error != null) return ast;
                 return ast.Success(atom);
             }
-            return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax, "Invalid Syntax Expected '.'"));
+            atom = ast.Registry(new PAtomCall().Rule(parser));
+            if (ast.Error != null)
+                return ast;
+            if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.PFUN])) {
+                return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax, "Expected '|' (close parallel block)"));
+            }
+            parser.NextToken(ast);
+            atom.ParVisitor = true;
+            return ast.Success(atom);
+            //return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax, "Invalid Syntax Expected '.'"));
         }
     }
 }

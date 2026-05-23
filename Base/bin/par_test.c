@@ -31,3 +31,18 @@ s = ||.sum(n)
 if manager
 	print("sum all and send to root -> " + s)
 end
+
+n = 8
+m = 16
+A = #[n, m]
+B = #[m, n]
+v = 0
+for i=0 to (n*m)
+	A(i,i)
+end
+for i = 0 to(n * m)
+	B(i, 1)
+end
+//print(A)
+//print(B)
+print(|A|*B)

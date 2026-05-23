@@ -232,20 +232,17 @@ namespace FrontEnd.Lexing {
             this.Next();
         }
         private Token MakePar() {
-            string valor;
-            string typeTOK = Consts.KEY;
-            JSource noIni = this.Source.Copy();
             this.Next();
-            Token t = new Token(null, null, noIni, this.Source);
-            if (this.Current == '|') {
-                typeTOK = Consts.KEY;
-                valor = Consts.KEYS[Consts.IDX.PFUN];
-                this.Next();
-                t = new Token(typeTOK, valor, noIni, this.Source);
-                return t;
+            while (this.Current == '|') {
+                this.Next();            
             }
-            t.Error = new TError(noIni, this.Source, Consts.KEY, "'|', expected ||");
-            return t;
+            JSource noIni = this.Source.Copy();
+            string typeTOK = Consts.KEY;
+            string valor = Consts.KEYS[Consts.IDX.PFUN];
+            return new Token(typeTOK, valor, noIni, this.Source);
+            //t = new Token(Consts.KEY, Consts.KEYS[Consts.IDX.PFUN], noIni, this.Source);
+            //t.Error = new TError(noIni, this.Source, Consts.KEY, "'|', expected ||");
+            //return t;
         }
     }
 }

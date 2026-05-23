@@ -139,6 +139,10 @@ namespace Common.Data {
         public DataFlow Run_len(JMemory memoryData) {
             TValue list_ = memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KList);
 
+            if (list_.GetType() == typeof(TMatrixNumber)) {
+                TMatrixNumber mat = (TMatrixNumber)list_;
+                return new DataFlow().SetDefaultAndNewTValue(new TNumber(mat.Col*mat.Row));
+            }
             if (list_.GetType() != typeof(TList)) {
               return new DataFlow().Fail(new TRunTimeError(
                 this.NOIni, this.NOEnd,
@@ -181,6 +185,12 @@ namespace Common.Data {
                 ));
             }
             return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null); 
+        }
+        public DataFlow Run_is_par(JMemory memoryData) {
+            if (MPIEnv.Rank == MPIEnv.Root) {
+                System.Console.WriteLine(memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue).Parallel());
+            }
+            return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null);
         }
 
         public DataFlow Run_mpi_sum(JMemory memoryData) {

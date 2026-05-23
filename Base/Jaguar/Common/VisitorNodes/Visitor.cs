@@ -11,5 +11,9 @@ namespace Common.Nodes {
         private TValue _value = TNull.Get();
 
         public TValue Value { get { return _value;  } set { _value = value;  } }
+
+        private bool _par = false;
+
+        public bool ParVisitor { get { return _par; } set { _par = value; } }
     }
 }

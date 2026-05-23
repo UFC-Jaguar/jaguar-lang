@@ -46,6 +46,7 @@ namespace Common.Data {
             SymbolTable.Set(Consts.EmbeddedFunction.PUSH, Consts.EmbeddedFunction.E_PUSH);
             SymbolTable.Set(Consts.EmbeddedFunction.GET, Consts.EmbeddedFunction.E_GET);
             SymbolTable.Set(Consts.EmbeddedFunction.LEN, Consts.EmbeddedFunction.E_LEN);
+            SymbolTable.Set(Consts.EmbeddedFunction.IS_PAR, Consts.EmbeddedFunction.E_IS_PAR);
 
             //SymbolTable.Set(Consts.EmbeddedFunction.CLS, Consts.EmbeddedFunction.E_CLEAR);
             //SymbolTable.Set(Consts.EmbeddedFunction.CONCAT_LIST, Consts.EmbeddedFunction.E_CONCAT_LIST);

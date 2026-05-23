@@ -119,6 +119,17 @@ namespace Common.Data {
             return TNull.Get().ToString(); // Deixar para o polimorfismo resolver. Subclasses devem sobrescrever
         }
         public bool Null { get { return this.Value == null; } }
+
+        public virtual bool Parallel() { return false; }
+        public virtual bool ParallelSet(bool b) { return false; }
+    }
+    public abstract class PValue : TValue {
+        public bool Par = false;
+        public override bool Parallel() { return this.Par; }
+        public override bool ParallelSet(bool b) {
+            this.Par = b || this.Par;
+            return this.Par; 
+        }
     }
     public class TNull : TValue { 
         public static TNull SINGVALUE = null;
