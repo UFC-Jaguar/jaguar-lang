@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FrontEnd.Lexing;
 using Common.Data;
+using Common.Errors;
 
 namespace Common.Nodes {
     public class NoFOR: Visitor {
@@ -34,11 +35,12 @@ namespace Common.Nodes {
             DataFlow manager = new DataFlow();
             var elements = new List<TValue>();
             TValue startValue = manager.update_and_get_value(this.StartValue.Visit(memory));
-            if (startValue.GetType() != typeof(TNumber)) {  // TODO: Verificar depois. Casar tipos?
-                new Exception("visit ForNode: Interpreter identified exception on startValue"); 
-            }
             if (manager.NeedReturn) 
                 return manager;
+            if (startValue.GetType() != typeof(TNumber)) {  // TODO: Verificar depois. Casar tipos?
+                //new Exception("visit ForNode: Interpreter identified exception on startValue");
+                return manager.Fail(new TRunTimeError(this.NOIni, this.NOEnd,"'startValue' on for is not number", memory));
+            }
             TValue endValue = manager.update_and_get_value(this.EndValue.Visit(memory));
             if (endValue.GetType() != typeof(TNumber)) { 
                 new Exception("visit ForNode: Interpreter identified exception on endValue"); 
