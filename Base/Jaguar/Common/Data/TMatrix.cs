@@ -1,16 +1,20 @@
 ﻿using Common.Errors;
 using System;
+using Common.Environment;
+using MPI;
 //using System.Collections.Generic; // |matrix = [2,3]|
 
 namespace Common.Data {
     [Serializable()]
-    public class TMatrixNumber : TValue {
+    public class TMatrixNumber : PValue {
         public double?[] MAT = null;//default;
         public int Row = 0;
         public int Col = 0;
         public override object Value { get { return this.MAT; } set { this.MAT = (double?[]) value; } }
 
-        public TMatrixNumber(int[] v):base() {
+        public TMatrixNumber(int[] v, bool _par = false):base() {
+            //Console.WriteLine("Parallel: " + _par);
+            this.Par = _par;
             int n = v.Length;
             int len = 0;
             this.Row = 0;
@@ -82,6 +86,7 @@ namespace Common.Data {
                     int c1 = this.Col;
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
+                    c.Par = this.Par;
                     for (int i = 0; i< l1; i++) {
                         for(int j = 0; j< c1; j++) {
                             c.MAT[i * c1 + j] = this.MAT[i * c1 + j] + o.MAT[i * c1 + j];
@@ -103,6 +108,7 @@ namespace Common.Data {
                     int c1 = this.Col;
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
+                    c.Par = this.Par;
                     for (int i = 0; i < l1; i++) {
                         for (int j = 0; j < c1; j++) {
                             c.MAT[i * c1 + j] = this.MAT[i * c1 + j] - o.MAT[i * c1 + j];
@@ -114,6 +120,7 @@ namespace Common.Data {
             return new TMatrixNumber(this.IllegalOp(other), this.memory);
         }
         public override TValue Multiply(TValue other) {
+            if (this.Par) return this.PMultiply(other);
             if (other.GetType() == typeof(TMatrixNumber)) {
                 TMatrixNumber o = (TMatrixNumber)other;
                 if (this.Col == o.Row) {
@@ -123,6 +130,30 @@ namespace Common.Data {
                     int c2 = o.Col;
                     int[] dim = { l1, c2 };
                     TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
+                    res.Par = this.Par;
+                    for (int i = 0; i < l1; i = i + step) {
+                        for (int j = 0; j < c1; j = j + step) {
+                            for (int k = 0; k < c2; k = k + step) {
+                                res.MAT[i * c2 + k] += this.MAT[i * c1 + j] * o.MAT[j * c2 + k];
+                            }
+                        }
+                    }
+                    return res;
+                }
+            }
+            return new TMatrixNumber(this.IllegalOp(other), this.memory);
+        }
+        public TValue PMultiply(TValue other) {
+            if (other.GetType() == typeof(TMatrixNumber)) {
+                TMatrixNumber o = (TMatrixNumber)other;
+                if (this.Col == o.Row) {
+                    int step = 1;
+                    int l1 = this.Row;
+                    int c1 = this.Col;
+                    int c2 = o.Col;
+                    int[] dim = { l1, c2 };
+                    TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
+                    res.Par = this.Par;
                     for (int i = 0; i < l1; i = i + step) {
                         for (int j = 0; j < c1; j = j + step) {
                             for (int k = 0; k < c2; k = k + step) {

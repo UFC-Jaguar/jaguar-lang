@@ -37,12 +37,16 @@ m = 16
 A = #[n, m]
 B = #[m, n]
 v = 0
-for i=0 to (n*m)
-	A(i,i)
+for i=0 to n
+	for j = 0 to m
+		A(i,j, j>i)
+	end
 end
-for i = 0 to(n * m)
+
+for i = 0 to (n * m)
 	B(i, 1)
 end
-//print(A)
-//print(B)
+print(A)
+print(B)
 print(|A|*B)
+is_par(A)
