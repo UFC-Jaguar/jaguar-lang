@@ -8,8 +8,12 @@ namespace Common.Environment {
         public static MPI.Environment Mpi { get; set; }
         public static Intracommunicator Comm_world { get; set; }
         public static int Root { get { return 0; } } // Gerente distribui e ajuda os trabalhadores
-        public static int Rank { get; set; }
-        public static int Size { get; set; }
+
+        private static int _rank = 0;
+        public static int Rank { get { return _rank; } set { _rank = value; } }
+
+        private static int _size = 1;
+        public static int Size { get { return _size;  } set { _size = value; } }
 
         public static void mpi_start(string[] args) {
             Rank = 0; Size = 1;
