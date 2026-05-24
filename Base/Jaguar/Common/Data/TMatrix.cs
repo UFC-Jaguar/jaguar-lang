@@ -7,33 +7,43 @@ using MPI;
 namespace Common.Data {
     [Serializable()]
     public class TMatrixNumber : PValue {
-        public double?[] MAT = null;//default;
+        public double?[][] MAT = null;//default;
         public int Row = 0;
         public int Col = 0;
-        public override object Value { get { return this.MAT; } set { this.MAT = (double?[]) value; } }
+        public int PLen = 0;
+        public override object Value { get { return this.MAT; } set { this.MAT = (double?[][]) value; } }
 
         public TMatrixNumber(int[] v, bool _par = false):base() {
             //Console.WriteLine("Parallel: " + _par);
             this.Par = _par;
             int n = v.Length;
-            int len = 0;
+            this.PLen = 0;
             this.Row = 0;
             this.Col = 0;
-            if (n > 0) {
-                len = 1;
-                this.Row = v[0]!=0?v[0]:1;
-                for (int i = 1; i < n; i++) 
-                    len = v[i]!=0?len*v[i]:len;
-                this.Col = len;
-                len = this.Row * this.Col;
-            }
-            this.MAT = new double?[len];
+            int size = MPIEnv.Size;
+            if (n > 0) { // Há argumento #[ai]
+                this.PLen = this.Row = v[0]>0?v[0]:1;
+                for (int i = 1; i < n; i++)
+                    this.PLen = v[i]>0? this.PLen * v[i]: this.PLen;
 
-            int l1 = this.Row;
-            int c1 = this.Col;
-            for (int i = 0; i < l1; i++) {
-                for (int j = 0; j < c1; j++) {
-                    this.MAT[i * c1 + j] = 0;
+                int col = this.PLen / this.Row;
+                bool unidimensional = col == 1;
+                this.Col = unidimensional? this.Row:col;
+                this.Row = unidimensional? 1 : this.Row;
+                this.PLen = this.Row * this.Col / size;
+            }
+            this.MAT = new double?[size][];
+            for (int k = 0; k < size; k++) {
+                this.MAT[k] = new double?[this.PLen];
+            }
+
+            int l1 = 1;//this.Row;
+            int c1 = this.PLen;//this.Row*this.Col;//this.Col;
+            for (int k = 0; k < size; k++) {
+                for (int i = 0; i < l1; i++) {
+                    for (int j = 0; j < c1; j++) {
+                        this.MAT[k][i * c1 + j] = 0;
+                    }
                 }
             }
         }
@@ -52,7 +62,7 @@ namespace Common.Data {
             if (args.Length<2) return manager.Fail(this.IllegalOp(null));
             int idx = 0;
             double? dv = 0;
-            int n = this.MAT.GetLength(0);
+            int n = this.MAT[MPIEnv.Rank].GetLength(0);
             int n_args = args.Length;
             int[] idxs = new int[n_args-1];
             bool ok = true;
@@ -73,7 +83,7 @@ namespace Common.Data {
             idx = idxs[0];
             if (ok && args.Length >= 3) { idx = idxs[0] * this.Col + idxs[1]; }
             if (ok && idx < n && idx >= 0) {
-                this.MAT[idx] = dv;
+                this.MAT[MPIEnv.Rank][idx] = dv;
                 return manager.SetDefaultAndNewTValue(this);
             }
             return manager.Fail(this.IllegalOp(null));// m(1,3,4)
@@ -89,7 +99,7 @@ namespace Common.Data {
                     c.Par = this.Par;
                     for (int i = 0; i< l1; i++) {
                         for(int j = 0; j< c1; j++) {
-                            c.MAT[i * c1 + j] = this.MAT[i * c1 + j] + o.MAT[i * c1 + j];
+                            c.MAT[MPIEnv.Rank][i * c1 + j] = this.MAT[MPIEnv.Rank][i * c1 + j] + o.MAT[MPIEnv.Rank][i * c1 + j];
                         }
                     }
                     return c;
@@ -111,7 +121,7 @@ namespace Common.Data {
                     c.Par = this.Par;
                     for (int i = 0; i < l1; i++) {
                         for (int j = 0; j < c1; j++) {
-                            c.MAT[i * c1 + j] = this.MAT[i * c1 + j] - o.MAT[i * c1 + j];
+                            c.MAT[MPIEnv.Rank][i * c1 + j] = this.MAT[MPIEnv.Rank][i * c1 + j] - o.MAT[MPIEnv.Rank][i * c1 + j];
                         }
                     }
                     return c;
@@ -134,7 +144,7 @@ namespace Common.Data {
                     for (int i = 0; i < l1; i = i + step) {
                         for (int j = 0; j < c1; j = j + step) {
                             for (int k = 0; k < c2; k = k + step) {
-                                res.MAT[i * c2 + k] += this.MAT[i * c1 + j] * o.MAT[j * c2 + k];
+                                res.MAT[MPIEnv.Rank][i * c2 + k] += this.MAT[MPIEnv.Rank][i * c1 + j] * o.MAT[MPIEnv.Rank][j * c2 + k];
                             }
                         }
                     }
@@ -157,7 +167,7 @@ namespace Common.Data {
                     for (int i = 0; i < l1; i = i + step) {
                         for (int j = 0; j < c1; j = j + step) {
                             for (int k = 0; k < c2; k = k + step) {
-                                res.MAT[i * c2 + k] += this.MAT[i * c1 + j] * o.MAT[j * c2 + k];
+                                res.MAT[MPIEnv.Rank][i * c2 + k] += this.MAT[MPIEnv.Rank][i * c1 + j] * o.MAT[MPIEnv.Rank][j * c2 + k];
                             }
                         }
                     }
@@ -213,14 +223,20 @@ namespace Common.Data {
         }
         public override string ToString() {
             string sb = " ";
-            int l1 = this.Row;
-            int c1 = this.Col;
-            for (int i = 0; i < l1; i++) {
-                for (int j = 0; j < c1; j++) {
-                    sb += this.MAT[i*c1+j]+((j+1)==c1?"\n ":", ");
+            string s = "";
+            int l1 = 1;//this.Row;
+            int c1 = this.PLen;//this.Row*this.Col;
+            int x = 0;
+            for (int k = 0; k < MPIEnv.Size; k++) {
+                for (int i = 0; i < l1; i++) {
+                    for (int j = 0; j < c1; j++) {
+                        x = x+1==this.Col?0:x+1;
+                        s = x == 0 ? "\n " : ", ";
+                        sb += this.MAT[k][i * c1 + j] + s;
+                    }
                 }
             }
-            return sb + " " + l1 + "x" + c1;
+            return sb + " " + this.Row + "x" + this.Col;
         }
         public override string ToStr() {
             return this.ToString();
