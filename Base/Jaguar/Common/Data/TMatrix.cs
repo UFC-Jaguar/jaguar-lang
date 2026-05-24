@@ -94,12 +94,15 @@ namespace Common.Data {
                 if (this.Row == o.Row && this.Col == o.Col) {
                     int l1 = this.Row;
                     int c1 = this.Col;
+                    int size = MPIEnv.Size;
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
                     c.Par = this.Par;
-                    for (int i = 0; i< l1; i++) {
-                        for(int j = 0; j< c1; j++) {
-                            c.MAT[MPIEnv.Rank][i * c1 + j] = this.MAT[MPIEnv.Rank][i * c1 + j] + o.MAT[MPIEnv.Rank][i * c1 + j];
+                    for (int k = 0; k < size; k++) {
+                        for (int i = 0; i < l1; i++) {
+                            for (int j = 0; j < c1; j++) {
+                                c.MAT[k][i * c1 + j] = this.MAT[k][i * c1 + j] + o.MAT[k][i * c1 + j];
+                            }
                         }
                     }
                     return c;
@@ -116,12 +119,15 @@ namespace Common.Data {
                 if (this.Row == o.Row && this.Col == o.Col) {
                     int l1 = this.Row;
                     int c1 = this.Col;
+                    int size = MPIEnv.Size;
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
                     c.Par = this.Par;
-                    for (int i = 0; i < l1; i++) {
-                        for (int j = 0; j < c1; j++) {
-                            c.MAT[MPIEnv.Rank][i * c1 + j] = this.MAT[MPIEnv.Rank][i * c1 + j] - o.MAT[MPIEnv.Rank][i * c1 + j];
+                    for (int k = 0; k < size; k++) {
+                        for (int i = 0; i < l1; i++) {
+                            for (int j = 0; j < c1; j++) {
+                                c.MAT[k][i * c1 + j] = this.MAT[k][i * c1 + j] - o.MAT[k][i * c1 + j];
+                            }
                         }
                     }
                     return c;
@@ -137,14 +143,17 @@ namespace Common.Data {
                     int step = 1;
                     int l1 = this.Row;
                     int c1 = this.Col;
+                    int size = MPIEnv.Size;
                     int c2 = o.Col;
                     int[] dim = { l1, c2 };
                     TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
                     res.Par = this.Par;
-                    for (int i = 0; i < l1; i = i + step) {
-                        for (int j = 0; j < c1; j = j + step) {
-                            for (int k = 0; k < c2; k = k + step) {
-                                res.MAT[MPIEnv.Rank][i * c2 + k] += this.MAT[MPIEnv.Rank][i * c1 + j] * o.MAT[MPIEnv.Rank][j * c2 + k];
+                    for (int r = 0; r < size; r++) {
+                        for (int i = 0; i < l1; i = i + step) {
+                            for (int j = 0; j < c1; j = j + step) {
+                                for (int k = 0; k < c2; k = k + step) {
+                                    res.MAT[r][i * c2 + k] += this.MAT[r][i * c1 + j] * o.MAT[r][j * c2 + k];
+                                }
                             }
                         }
                     }
