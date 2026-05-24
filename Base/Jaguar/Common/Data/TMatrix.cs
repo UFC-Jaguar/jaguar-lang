@@ -81,9 +81,17 @@ namespace Common.Data {
                 return manager.Fail(this.IllegalOp(null));
             }
             idx = idxs[0];
-            if (ok && args.Length >= 3) { idx = idxs[0] * this.Col + idxs[1]; }
+            int size = MPIEnv.Size;
+            int unidimensional_indice = idxs.Length > 1? idxs[0] * this.Col + idxs[1]:idx;
+            int prank = (int)(unidimensional_indice/this.PLen);
+            
+
+            if (ok && args.Length >= 2) { 
+                idx = (unidimensional_indice%n); 
+            }
+            ok = ok && unidimensional_indice < (this.Row * this.Col); //Console.WriteLine("prank: " + prank + " unidimensional_indice: " + unidimensional_indice+ " idxs[0]: " + idxs[0] + " idxs[1]: " + (idxs.Length > 1 ? idxs[1] : 0) + " this.PLen: "+this.PLen + " ok: "+ok + " args.Len: "+args.Length);
             if (ok && idx < n && idx >= 0) {
-                this.MAT[MPIEnv.Rank][idx] = dv;
+                this.MAT[prank][idx] = dv;
                 return manager.SetDefaultAndNewTValue(this);
             }
             return manager.Fail(this.IllegalOp(null));// m(1,3,4)
@@ -169,14 +177,17 @@ namespace Common.Data {
                     int step = 1;
                     int l1 = this.Row;
                     int c1 = this.Col;
+                    int size = MPIEnv.Size;
                     int c2 = o.Col;
                     int[] dim = { l1, c2 };
                     TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
                     res.Par = this.Par;
-                    for (int i = 0; i < l1; i = i + step) {
-                        for (int j = 0; j < c1; j = j + step) {
-                            for (int k = 0; k < c2; k = k + step) {
-                                res.MAT[MPIEnv.Rank][i * c2 + k] += this.MAT[MPIEnv.Rank][i * c1 + j] * o.MAT[MPIEnv.Rank][j * c2 + k];
+                    for (int r = 0; r < size; r++) {
+                        for (int i = 0; i < l1; i = i + step) {
+                            for (int j = 0; j < c1; j = j + step) {
+                                for (int k = 0; k < c2; k = k + step) {
+                                    res.MAT[r][i * c2 + k] += this.MAT[r][i * c1 + j] * o.MAT[r][j * c2 + k];
+                                }
                             }
                         }
                     }
