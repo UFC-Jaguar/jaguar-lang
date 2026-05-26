@@ -27,7 +27,8 @@ namespace FrontEnd.Grammar {
             parser.NextToken(ast);
 
 		    if (parser.Current.Type != Consts.EQ){
-                //if (parser.Current.Matches(Consts.KEY, Consts.IN)) return (new ForInExp().Rule(idtoken));
+                if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.IN]))
+                    return new ForInExp().RuleT(parser, idToken);
 			    
                 return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax, "Expected '='"));
 		    }

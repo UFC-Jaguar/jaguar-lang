@@ -80,6 +80,7 @@ namespace Common.Data {
             copy.SetMemory(this.memory);
             return copy;
         }
+        public override bool IsList() { return true; }
         public override string ToString() {
             string s = "[";
             for (int i = 0; i < this.VAL.Count; i++) {

@@ -57,6 +57,7 @@
     <Compile Include="Common\Environment\PRunner.cs" />
     <Compile Include="Common\Environment\Runner.cs" />
     <Compile Include="Common\Environment\SRunner.cs" />
+    <Compile Include="Common\VisitorNodes\NoForIn.cs" />
     <Compile Include="Common\VisitorNodes\NoFuncFun.cs" />
     <Compile Include="Common\VisitorNodes\NoMatrix.cs" />
     <Compile Include="Common\VisitorNodes\NoPAtomCall.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="FrontEnd\Grammar\ArithExp.cs" />
     <Compile Include="FrontEnd\Grammar\Atom.cs" />
     <Compile Include="FrontEnd\Grammar\AtomCall.cs" />
+    <Compile Include="FrontEnd\Grammar\ForInExp.cs" />
     <Compile Include="FrontEnd\Grammar\FuncFun.cs" />
     <Compile Include="FrontEnd\Grammar\IfBody.cs" />
     <Compile Include="FrontEnd\Grammar\IfElse.cs" />
