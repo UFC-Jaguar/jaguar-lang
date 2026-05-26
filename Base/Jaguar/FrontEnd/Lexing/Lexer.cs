@@ -93,6 +93,9 @@ namespace FrontEnd.Lexing {
                 } else if (this.Current == Consts.MATRIX[0]) {
                     tokens.Add(new Token(Consts.KEY, Consts.MATRIX, this.Source));
                     this.Next();
+                } else if (this.Current == ':') {
+                    tokens.Add(new Token(Consts.KEY, Consts.COLON, this.Source));
+                    this.Next();
                 } else if (this.Current == 65279) {// TODO: Erro de char: Unicode Character 'ZERO WIDTH MAT-BREAK SPACE'(U + FEFF)
                     this.Next();
                 } else {

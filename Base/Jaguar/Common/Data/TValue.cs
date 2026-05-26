@@ -107,6 +107,9 @@ namespace Common.Data {
         public virtual bool IsTrue() {
             return false;
         }
+        public virtual bool IsInt() {
+            return false;
+        }
         public virtual TError IllegalOp(TValue other) {
             if (other == null) other = this;
             return new TRunTimeError(

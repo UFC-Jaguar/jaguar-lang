@@ -1,5 +1,6 @@
 ﻿using Common.Errors;
 using System;
+using static Common.Data.Consts;
 //using System.Collections.Generic;
 
 namespace Common.Data {
@@ -150,6 +151,9 @@ namespace Common.Data {
         }
         public override string ToStr() {
             return this.ToString();
+        }
+        public override bool IsInt() {
+            return this.VAL % 1 == 0;
         }
     }
 }

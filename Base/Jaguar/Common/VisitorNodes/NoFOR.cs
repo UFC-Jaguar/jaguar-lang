@@ -3,57 +3,66 @@ using System.Collections.Generic;
 using FrontEnd.Lexing;
 using Common.Data;
 using Common.Errors;
+using System.Linq;
 
 namespace Common.Nodes {
     public class NoFOR: Visitor {
-		private Token TokenVar { get; set; } // TODO: Ver se podemos remover daqui. Como pegaríamos da tabela de símbolos?
-        private Visitor StartValue { get; set; } //= null;
-        private Visitor EndValue { get; set; } //= null;
-        private Visitor StepValue { get; set; } //= null;
-        private Visitor Body { get; set; } //= null;
-        private bool NeedReturnNull { get; set; } //= false;
-        public NoFOR(Token tokenVar, Visitor startValueNode, Visitor endValueNode, Visitor stepValueNode, Visitor bodyNode, bool needReturnNull) {
-            this.TokenVar = tokenVar;
-            this.StartValue = startValueNode;
-            this.EndValue = endValueNode;
-            this.StepValue = stepValueNode;
-            this.Body = bodyNode;
-            this.NeedReturnNull = needReturnNull;
+		private Token IDTypeToken { get; set; } // TODO: Ver se podemos remover daqui. Como pegaríamos da tabela de símbolos?
+        private Visitor StartExpVisitor { get; set; } //= null;
+        private Visitor StopExpVisitor { get; set; } //= null;
+        private Visitor IncrementalExpVisitor { get; set; } //= null;
+        private Visitor BodyStatementsVisitor { get; set; } //= null;
+        private bool ListComprehension { get; set; } //= false;
+        public NoFOR(Token idToken, Visitor start_exp_visitor, Visitor stop_exp_visitor, Visitor incremental_exp_visitor, Visitor statements_body_visitor) {
+            this.IDTypeToken = idToken;
+            this.StartExpVisitor = start_exp_visitor;
+            this.StopExpVisitor = stop_exp_visitor;
+            this.IncrementalExpVisitor = incremental_exp_visitor;
+            this.BodyStatementsVisitor = statements_body_visitor;
+            this.ListComprehension = true; // This flag allow for data return
 
-            this.NOIni = this.TokenVar.NOIni;
-            this.NOEnd = this.Body.NOEnd;
+            this.NOIni = this.IDTypeToken.NOIni;
+            this.NOEnd = this.BodyStatementsVisitor.NOEnd;
         }
         public override string ToString() {
-            string step = StepValue != null ? StepValue.ToString() + ", ": "";
-            return "("+TokenVar.ToString() + ", " + 
-                StartValue.ToString() + ", " +
-                EndValue.ToString() + ", " +
+            string step = IncrementalExpVisitor != null ? IncrementalExpVisitor.ToString() + ", ": "";
+            return "("+IDTypeToken.ToString() + ", " + 
+                StartExpVisitor.ToString() + ", " +
+                StopExpVisitor.ToString() + ", " +
                 step + 
-                Body.ToString()+")";
+                BodyStatementsVisitor.ToString()+")";
         }
         public override DataFlow Visit(JMemory memory) {
-            DataFlow manager = new DataFlow();
+            DataFlow dataflow = new DataFlow();
             var elements = new List<TValue>();
-            TValue startValue = manager.update_and_get_value(this.StartValue.Visit(memory));
-            if (manager.NeedReturn) 
-                return manager;
-            if (startValue.GetType() != typeof(TNumber)) {  // TODO: Verificar depois. Casar tipos?
-                //new Exception("visit ForNode: Interpreter identified exception on startValue");
-                return manager.Fail(new TRunTimeError(this.NOIni, this.NOEnd,"'startValue' on for is not number", memory));
-            }
-            TValue endValue = manager.update_and_get_value(this.EndValue.Visit(memory));
+            
+            TValue startValue = dataflow.update_and_get_value(this.StartExpVisitor.Visit(memory));
+            
+            if (!startValue.IsInt())
+                return dataflow.Fail(new TRunTimeError(this.NOIni, this.NOEnd, "'startValue' on for is not integer", memory));
+
+            if (dataflow.NeedReturn) 
+                return dataflow;
+
+            //if (startValue.GetType() != typeof(TNumber)) {  // TODO: Verificar depois. Casar tipos?
+            //    //new Exception("visit ForNode: Interpreter identified exception on startValue");
+            //    return dataflow.Fail(new TRunTimeError(this.NOIni, this.NOEnd,"'startValue' on for is not number", memory));
+            //}
+            
+            TValue endValue = dataflow.update_and_get_value(this.StopExpVisitor.Visit(memory));
+            
             if (endValue.GetType() != typeof(TNumber)) { 
                 new Exception("visit ForNode: Interpreter identified exception on endValue"); 
             }
-            if (manager.NeedReturn) 
-                return manager;
+            if (dataflow.NeedReturn) 
+                return dataflow;
 
             TValue stepValue = new TNumber(1);
 
-            if (this.StepValue != null) {
-                stepValue = manager.update_and_get_value(this.StepValue.Visit(memory));
-                if (manager.NeedReturn) 
-                    return manager;
+            if (this.IncrementalExpVisitor != null) {
+                stepValue = dataflow.update_and_get_value(this.IncrementalExpVisitor.Visit(memory));
+                if (dataflow.NeedReturn) 
+                    return dataflow;
             }
 
             var i = ((TNumber)startValue).VAL;
@@ -64,22 +73,23 @@ namespace Common.Nodes {
             }
 
             while (condition()) {
-                memory.SymbolTable.Set(this.TokenVar.Value, new TNumber(i));
+                memory.SymbolTable.Set(this.IDTypeToken.Value, new TNumber(i));
                 i += ((TNumber)stepValue).VAL;
 
-                TValue value = manager.update_and_get_value(this.Body.Visit(memory));
-                if (manager.NeedReturn && manager.LoopContinue == false && manager.LoopBreak == false) 
-                    return manager;
-                if (manager.LoopContinue) 
+                TValue value = dataflow.update_and_get_value(this.BodyStatementsVisitor.Visit(memory));
+                if (dataflow.NeedReturn && dataflow.LoopContinue == false && dataflow.LoopBreak == false) 
+                    return dataflow;
+                if (dataflow.LoopContinue) 
                     continue;
-                if (manager.LoopBreak) 
+                if (dataflow.LoopBreak) 
                     break;
-                elements.Add(value);
+                List<TValue> lista = ((TList)value).VAL;
+                elements.Add(lista.Last());
             }
             TList l = new TList(elements);
-            TValue v = this.NeedReturnNull ? Consts.Number.Null : l.SetMemory(memory).SetLocation(this.NOIni, this.NOEnd);
+            TValue v = this.ListComprehension ? l.SetMemory(memory).SetLocation(this.NOIni, this.NOEnd): Consts.Number.Null;
             this.Value = v;
-            return manager.SetDefaultAndNewTValue(v); 
+            return dataflow.SetDefaultAndNewTValue(v); 
         }
     }
 }

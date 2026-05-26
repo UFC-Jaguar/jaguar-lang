@@ -23,37 +23,38 @@ namespace FrontEnd.Grammar {
                     "Expected identifier"
 			    ));
             }
-		    Token var_name = parser.Current;
+		    Token idToken = parser.Current;
             parser.NextToken(ast);
 
 		    if (parser.Current.Type != Consts.EQ){
-			    return ast.Fail(new TError(
-				    parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                    "Expected '='"
-			    ));
+                //if (parser.Current.Matches(Consts.KEY, Consts.IN)) return (new ForInExp().Rule(idtoken));
+			    
+                return ast.Fail(new TError(parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax, "Expected '='"));
 		    }
 		    parser.NextToken(ast);
 
-            Visitor start_value = ast.Registry(new Exp().Rule(parser));
+            Visitor start_exp_visitor = ast.Registry(new Exp().Rule(parser));
 		    if (ast.Error!=null) return ast;
 
-		    if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.TO])) { 
+		    if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.COLON])) { 
 			    return ast.Fail(new TError(
 				    parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                    "Expected '" + Consts.KEYS[Consts.IDX.TO] + "'"
+                    "Expected '" + Consts.KEYS[Consts.IDX.COLON] + "'"
                 ));
 		    }
 		    parser.NextToken(ast);
 
-            Visitor end_value = ast.Registry(new Exp().Rule(parser));
+            Visitor stop_exp_visitor = ast.Registry(new Exp().Rule(parser));
 		    if (ast.Error!=null) return ast;
 
-            Visitor step_value = null;
+            Visitor incremental_exp_visitor = null;
 
-            if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.STEP])) {
+            if (parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.COLON])) {
 			    parser.NextToken(ast);
 
-			    step_value = ast.Registry(new Exp().Rule(parser));
+                incremental_exp_visitor = stop_exp_visitor;
+
+                stop_exp_visitor = ast.Registry(new Exp().Rule(parser));
 			    if (ast.Error!=null) return ast;
             }
 
@@ -65,23 +66,25 @@ namespace FrontEnd.Grammar {
             //}
             //parser.NextToken(ast);
             /* MultiLine */
-            if (parser.Current.Type == Consts.NEWLINE){
-              parser.NextToken(ast);
+            //if (parser.Current.Type == Consts.NEWLINE){
+            //parser.NextToken(ast);
 
-              Visitor true_body = ast.Registry(new Statements().Rule(parser)); 
-              if (ast.Error!=null) return ast;
-              if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.END])) {
-                return ast.Fail(new TError(
-                  parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
-                  "Expected '" + Consts.KEYS[Consts.IDX.END] + "'"
-                ));
-              }
-              parser.NextToken(ast);
-
-              return ast.Success(new NoFOR(var_name, start_value, end_value, step_value, true_body, true));
+            Visitor statements_body_visitor = ast.Registry(new Statements().Rule(parser)); 
+            if (ast.Error!=null) return ast;
+            
+            if (!parser.Current.Matches(Consts.KEY, Consts.KEYS[Consts.IDX.END])) {
+            return ast.Fail(new TError(
+                parser.Current.NOIni, parser.Current.NOEnd, TError.ESyntax,
+                "Expected '" + Consts.KEYS[Consts.IDX.END] + "'"
+            ));
             }
-            /* End MultiLine */
+            parser.NextToken(ast);
 
+            return ast.Success(new NoFOR(idToken, start_exp_visitor, stop_exp_visitor, incremental_exp_visitor, statements_body_visitor));
+            //}
+            /* End MultiLine */
+            
+            /*
             Visitor body = ast.Registry(new Stm().Rule(parser));
 		    if (ast.Error!=null) return ast;
 
@@ -93,7 +96,8 @@ namespace FrontEnd.Grammar {
             }
             parser.NextToken(ast);
 
-            return ast.Success(new NoFOR(var_name, start_value, end_value, step_value, body, false));
+            return ast.Success(new NoFOR(idToken, start_exp_visitor, stop_exp_visitor, incremental_exp_visitor, body, false));
+            */
         }
     }
 }
