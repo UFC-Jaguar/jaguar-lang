@@ -2,48 +2,36 @@
 using System;
 using Common.Environment;
 using MPI;
+using System.Reflection;
 //using System.Collections.Generic; // |matrix = [2,3]|
 
 namespace Common.Data {
     [Serializable()]
     public class TMatrixNumber : PValue {
-        public double?[][] MAT = null;//default;
+        public double?[] MAT = null;//default;
         public int Row = 0;
         public int Col = 0;
-        public int PLen = 0;
-        public override object Value { get { return this.MAT; } set { this.MAT = (double?[][]) value; } }
+        public override object Value { get { return this.MAT; } set { this.MAT = (double?[]) value; } }
 
-        public TMatrixNumber(int[] v, bool _par = false):base() {
-            //Console.WriteLine("Parallel: " + _par);
+        public TMatrixNumber(int[] v, bool _par = false):base() { //Console.WriteLine("Parallel: " + _par);
             this.Par = _par;
             int n = v.Length;
-            this.PLen = 0;
             this.Row = 0;
             this.Col = 0;
-            int size = MPIEnv.Size;
+            int size = 1;
             if (n > 0) { // Há argumento #[ai]
-                this.PLen = this.Row = v[0]>0?v[0]:1;
+                this.Row = v[0]>0?v[0]:1;
                 for (int i = 1; i < n; i++)
-                    this.PLen = v[i]>0? this.PLen * v[i]: this.PLen;
-
-                int col = this.PLen / this.Row;
-                bool unidimensional = col == 1;
-                this.Col = unidimensional? this.Row:col;
-                this.Row = unidimensional? 1 : this.Row;
-                this.PLen = this.Row * this.Col / size;
+                    size = v[i]>0? size * v[i]: 1;
+                this.Col = size;
             }
-            this.MAT = new double?[size][];
-            for (int k = 0; k < size; k++) {
-                this.MAT[k] = new double?[this.PLen];
-            }
-
-            int l1 = 1;//this.Row;
-            int c1 = this.PLen;//this.Row*this.Col;//this.Col;
-            for (int k = 0; k < size; k++) {
-                for (int i = 0; i < l1; i++) {
-                    for (int j = 0; j < c1; j++) {
-                        this.MAT[k][i * c1 + j] = 0;
-                    }
+            size = this.Row * this.Col;
+            this.MAT = new double?[size];
+            int l1 = this.Row;
+            int c1 = this.Col;
+            for (int i = 0; i < l1; i++) {
+                for (int j = 0; j < c1; j++) {
+                    this.MAT[i * c1 + j] = 0;
                 }
             }
         }
@@ -59,12 +47,12 @@ namespace Common.Data {
         }
         public override DataFlow Run(TValue[] args) {
             DataFlow manager = new DataFlow();
-            if (args.Length<2) return manager.Fail(this.IllegalOp(null));
-            int idx = 0;
+            if (args.Length < 2)
+                return manager.Fail(this.IllegalOp(null));
             double? dv = 0;
-            int n = this.MAT[MPIEnv.Rank].GetLength(0);
+            int n = this.MAT.Length;
             int n_args = args.Length;
-            int[] idxs = new int[n_args-1];
+            int[] idxs = new int[n_args - 1];
             bool ok = true;
             for (int k = 0; k < n_args - 1; k++) {
                 try {
@@ -75,23 +63,15 @@ namespace Common.Data {
                 }
             }
             try {
-                ok = args[n_args-1].GetType() == typeof(TNumber) && ok;
-                dv = (double?)args[n_args-1].Value;
+                ok = args[n_args - 1].GetType() == typeof(TNumber) && ok;
+                dv = (double?)args[n_args - 1].Value;
             } catch (Exception ex) {
                 return manager.Fail(this.IllegalOp(null));
             }
-            idx = idxs[0];
-            int size = MPIEnv.Size;
-            int unidimensional_indice = idxs.Length > 1? idxs[0] * this.Col + idxs[1]:idx;
-            int prank = (int)(unidimensional_indice/this.PLen);
-            
-
-            if (ok && args.Length >= 2) { 
-                idx = (unidimensional_indice%n); 
-            }
-            ok = ok && unidimensional_indice < (this.Row * this.Col); //Console.WriteLine("prank: " + prank + " unidimensional_indice: " + unidimensional_indice+ " idxs[0]: " + idxs[0] + " idxs[1]: " + (idxs.Length > 1 ? idxs[1] : 0) + " this.PLen: "+this.PLen + " ok: "+ok + " args.Len: "+args.Length);
+            int idx = idxs[0];
+            if (ok && args.Length >= 3) { idx = idxs[0] * this.Col + idxs[1]; }
             if (ok && idx < n && idx >= 0) {
-                this.MAT[prank][idx] = dv;
+                this.MAT[idx] = dv;
                 return manager.SetDefaultAndNewTValue(this);
             }
             return manager.Fail(this.IllegalOp(null));// m(1,3,4)
@@ -106,19 +86,16 @@ namespace Common.Data {
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
                     c.Par = this.Par;
-                    for (int k = 0; k < size; k++) {
-                        for (int i = 0; i < l1; i++) {
-                            for (int j = 0; j < c1; j++) {
-                                c.MAT[k][i * c1 + j] = this.MAT[k][i * c1 + j] + o.MAT[k][i * c1 + j];
-                            }
+                    l1 = this.Row;
+                    c1 = this.Col;
+                    for (int i = 0; i < l1; i++) {
+                        for (int j = 0; j < c1; j++) {
+                            c.MAT[i * c1 + j] = this.MAT[i * c1 + j] + o.MAT[i * c1 + j];
                         }
                     }
                     return c;
                 }
             }
-            //if (other.GetType() == typeof(TNumber)) {
-            //    return new TMatrixNumber(this.VAL + ((TNumber)other).VAL, this.memory);
-            //}
             return new TMatrixNumber(this.IllegalOp(other), this.memory);
         }
         public override TValue Sub(TValue other) {
@@ -127,15 +104,13 @@ namespace Common.Data {
                 if (this.Row == o.Row && this.Col == o.Col) {
                     int l1 = this.Row;
                     int c1 = this.Col;
-                    int size = MPIEnv.Size;
+                    //int size = MPIEnv.Size;
                     int[] dim = { l1, c1 };
                     TMatrixNumber c = new TMatrixNumber(dim);
                     c.Par = this.Par;
-                    for (int k = 0; k < size; k++) {
-                        for (int i = 0; i < l1; i++) {
-                            for (int j = 0; j < c1; j++) {
-                                c.MAT[k][i * c1 + j] = this.MAT[k][i * c1 + j] - o.MAT[k][i * c1 + j];
-                            }
+                    for (int i = 0; i < l1; i++) {
+                        for (int j = 0; j < c1; j++) {
+                            c.MAT[i * c1 + j] = this.MAT[i * c1 + j] - o.MAT[i * c1 + j];
                         }
                     }
                     return c;
@@ -144,28 +119,25 @@ namespace Common.Data {
             return new TMatrixNumber(this.IllegalOp(other), this.memory);
         }
         public override TValue Multiply(TValue other) {
-            if (this.Par) return this.PMultiply(other);
+            //if (this.Par) return this.PMultiply(other);
             if (other.GetType() == typeof(TMatrixNumber)) {
                 TMatrixNumber o = (TMatrixNumber)other;
                 if (this.Col == o.Row) {
                     int step = 1;
                     int l1 = this.Row;
                     int c1 = this.Col;
-                    int size = MPIEnv.Size;
                     int c2 = o.Col;
                     int[] dim = { l1, c2 };
-                    TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
-                    res.Par = this.Par;
-                    for (int r = 0; r < size; r++) {
-                        for (int i = 0; i < l1; i = i + step) {
-                            for (int j = 0; j < c1; j = j + step) {
-                                for (int k = 0; k < c2; k = k + step) {
-                                    res.MAT[r][i * c2 + k] += this.MAT[r][i * c1 + j] * o.MAT[r][j * c2 + k];
-                                }
+                    TMatrixNumber C = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
+                    C.Par = this.Par;
+                    for (int i = 0; i < l1; i = i + step) {
+                        for (int j = 0; j < c1; j = j + step) {
+                            for (int k = 0; k < c2; k = k + step) {
+                                C.MAT[i * c2 + k] += this.MAT[i * c1 + j] * o.MAT[j * c2 + k];
                             }
                         }
                     }
-                    return res;
+                    return C;
                 }
             }
             return new TMatrixNumber(this.IllegalOp(other), this.memory);
@@ -177,17 +149,14 @@ namespace Common.Data {
                     int step = 1;
                     int l1 = this.Row;
                     int c1 = this.Col;
-                    int size = MPIEnv.Size;
                     int c2 = o.Col;
                     int[] dim = { l1, c2 };
                     TMatrixNumber res = new TMatrixNumber(dim);// l1_A_c1_B_c2 == l1_C_c2
                     res.Par = this.Par;
-                    for (int r = 0; r < size; r++) {
-                        for (int i = 0; i < l1; i = i + step) {
-                            for (int j = 0; j < c1; j = j + step) {
-                                for (int k = 0; k < c2; k = k + step) {
-                                    res.MAT[r][i * c2 + k] += this.MAT[r][i * c1 + j] * o.MAT[r][j * c2 + k];
-                                }
+                    for (int i = 0; i < l1; i = i + step) {
+                        for (int j = 0; j < c1; j = j + step) {
+                            for (int k = 0; k < c2; k = k + step) {
+                                res.MAT[i * c2 + k] += this.MAT[i * c1 + j] * o.MAT[j * c2 + k];
                             }
                         }
                     }
@@ -244,16 +213,13 @@ namespace Common.Data {
         public override string ToString() {
             string sb = " ";
             string s = "";
-            int l1 = 1;//this.Row;
-            int c1 = this.PLen;//this.Row*this.Col;
-            int x = 0;
-            for (int k = 0; k < MPIEnv.Size; k++) {
-                for (int i = 0; i < l1; i++) {
-                    for (int j = 0; j < c1; j++) {
-                        x = x+1==this.Col?0:x+1;
-                        s = x == 0 ? "\n " : ", ";
-                        sb += this.MAT[k][i * c1 + j] + s;
-                    }
+            int l1 = this.Row;
+            int c1 = this.Col;
+            
+            //MPI.Operation<double?[]>.Multiply
+            for (int i = 0; i < l1; i++) {
+                for (int j = 0; j < c1; j++) {
+                    sb += this.MAT[i * c1 + j] + ((j + 1) == c1 ? "\n " : ", ");
                 }
             }
             return sb + " " + this.Row + "x" + this.Col;

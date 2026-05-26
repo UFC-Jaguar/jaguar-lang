@@ -123,6 +123,7 @@ namespace Common.Data {
         public virtual bool Parallel() { return false; }
         public virtual bool ParallelSet(bool b) { return false; }
     }
+    [Serializable()]
     public abstract class PValue : TValue {
         public bool Par = false;
         public override bool Parallel() { return this.Par; }
