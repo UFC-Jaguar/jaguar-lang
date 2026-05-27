@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{90A72AB3-6C8
 	ProjectSection(SolutionItems) = preProject
 		bin\Grammar.txt = bin\Grammar.txt
 		bin\if_test.c = bin\if_test.c
+		bin\matrix_par.c = bin\matrix_par.c
 		bin\par_test.c = bin\par_test.c
 		bin\serial_test.c = bin\serial_test.c
 	EndProjectSection
