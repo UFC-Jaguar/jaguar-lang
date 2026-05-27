@@ -12,7 +12,7 @@ x = ||.scatter(dados)
 allprint("p" + pid + "(" + || .ip() + ") -> " + x)
 print("############# Node sum #############################")
 n = 0
-for i=0 to len(x)
+for i=0 : len(x)
 	// NOTE: get(x,i)==x/i. In the future release (on c++), the value of list will be x!!i, like haskell
 	n = n + get(x,i)
 end
@@ -22,7 +22,7 @@ print("############## Using ||.gather(n) ##################")
 r = ||.gather(n)
 if manager
     g = 0
-	for i = 0 to len(r) g = g + r/i end
+	for i = 0 : len(r) g = g + r/i end
 	print("sum all and send to root -> " + g)
 end
 
@@ -37,16 +37,16 @@ m = 16
 A = #[n, m]
 B = #[m, n]
 v = 0
-for i=0 to n
-	for j = 0 to m
+for i = 0 : n
+	for j = 0 : m
 		A(i,j, j>i)
 	end
 end
 
-for i = 0 to (n * m)
+for i = 0:(n * m)
 	B(i, 1)
 end
 print(A)
 print(B)
-print(|A|*B)
-is_par(A)
+print(A*B)
+//is_par(A)

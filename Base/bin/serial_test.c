@@ -7,7 +7,7 @@ def ifibo(n)
   let a = 0
   let b = 1
   let c = a + b
-  for i = 1 to n
+  for i = 1 : n
     let c = a + b
     let a = b
     let b = c
@@ -36,12 +36,12 @@ print("iFibo(" + n + ") = " + ifibo(n))
 print("Recursivo, Fibo(" + n + ")=" + ifibo(n))
 print("Oi!!!")
 
-def fibo(n); let a = 0; let b = 1; let c = a + b; for i = 1 to n; let c = a + b; let a = b; let b = c; end; return c; end
+def fibo(n); let a = 0; let b = 1; let c = a + b; for i = 1 : n; let c = a + b; let a = b; let b = c; end; return c; end
 print(fibo(n))
 def test(); let num = 5; return num; end
 print(test())
 let a = []
-for i = 0 to 13
+for i = 0 : 13
     if i == 5
         continue 
     elif i == 9
