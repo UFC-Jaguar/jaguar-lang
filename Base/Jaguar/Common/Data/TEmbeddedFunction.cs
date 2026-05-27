@@ -192,6 +192,14 @@ namespace Common.Data {
             }
             return new DataFlow().SetDefaultAndNewTValue(Consts.Number.Null);
         }
+        public DataFlow Run_now(JMemory memoryData){
+            //            return new DataFlow().SetDefaultAndNewTValue(new TNumber(((TList)list_).VAL.Count));
+            DataFlow dataflow = new DataFlow();
+            long t0 = (long)(DateTime.UtcNow - (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalMilliseconds;
+            TNumber tvalue = new TNumber(t0);
+            //#self.memory.symbolTable.set(self.EmbeddedFunctionName, self.value);
+            return dataflow.SetDefaultAndNewTValue(tvalue);
+        }
 
         public DataFlow Run_mpi_sum(JMemory memoryData) {
             float x = (float) ((TNumber) memoryData.SymbolTable.Get(Consts.ArgNames.Keys.KValue)).Value;
