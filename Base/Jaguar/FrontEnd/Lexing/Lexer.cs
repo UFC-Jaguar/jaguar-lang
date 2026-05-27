@@ -232,7 +232,7 @@ namespace FrontEnd.Lexing {
             this.Next();
             while (this.Current!=null && this.Current != '\n')
               this.Next();
-            this.Next();
+            //this.Next(); After NEWLINE: NEWLINE should include as Token.
         }
         private Token MakePar() {
             this.Next();
