@@ -51,8 +51,9 @@ namespace Common.Environment {
             if (args.Length > 0) {
                 string expression = FileRead(args[0]);
                 if (MPIEnv.Rank == MPIEnv.Root) {
-                    Console.WriteLine(expression);
+                    Console.WriteLine((Runner.prompt + ">")+expression);
                 }
+                PRunner.PRun(expression, ref memory);
             } else {
                 string line = InitEnv();
                 while (line != ":q") {
