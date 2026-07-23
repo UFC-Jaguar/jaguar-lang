@@ -1,5 +1,5 @@
-load=65536
-//load=400
+//load=65536
+load=4000
 ini = 0
 fim = (load)/size-1
 lin = 100

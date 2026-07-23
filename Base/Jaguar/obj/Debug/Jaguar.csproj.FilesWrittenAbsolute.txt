@@ -1,0 +1,6 @@
+/home/jaguar/workspace/jaguar-lang/Base/Jaguar/obj/Debug/.NETFramework,Version=v4.8.AssemblyAttribute.cs
+/home/jaguar/workspace/jaguar-lang/Base/bin/Jaguar.exe.config
+/home/jaguar/workspace/jaguar-lang/Base/bin/Jaguar.pdb
+/home/jaguar/workspace/jaguar-lang/Base/bin/Jaguar.exe
+/home/jaguar/workspace/jaguar-lang/Base/Jaguar/obj/Debug/Jaguar.exe
+/home/jaguar/workspace/jaguar-lang/Base/Jaguar/obj/Debug/Jaguar.pdb

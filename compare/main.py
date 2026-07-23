@@ -1,6 +1,7 @@
 import numpy as np
 import time
-load = 2000
+#load = 65536
+load = 4000
 ini = 0
 fim = load - 1
 lin = 100
