@@ -1,5 +1,6 @@
+load=65536
 ini = 0
-fim = 999
+fim = (load)/size-1
 lin = 100
 col = 100
 matrix = for i = ini : fim #[lin, col] end
