@@ -1,7 +1,8 @@
 import numpy as np
 import time
+load = 2000
 ini = 0
-fim = 19999
+fim = load - 1
 lin = 100
 col = 100
 matrixs = []
@@ -26,5 +27,5 @@ for e in matrixs:
   m = m @ e
 end_time = time.perf_counter()
 print(f"Execution time: {end_time - start_time:.6f} seconds")
-print(f"Total de matrizes multiplicadas: {len(matrixs)+1}\nDimensao: {lin} x {col}")
+print(f"Total de matrizes multiplicadas: {load}\nDimensao: {lin} x {col}")
 #print(m)
