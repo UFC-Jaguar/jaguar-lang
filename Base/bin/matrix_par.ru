@@ -1,5 +1,7 @@
-//load=65536
-load=4000
+t0 = now()
+//load = 65536
+load = 20000
+//load = 4000
 ini = 0
 fim = (load)/size-1
 lin = 100
@@ -12,7 +14,6 @@ tipo = if size == 1 "Serial" else "Paralelo" end
 print("####################### Tipo: " + tipo + " ####################")
 print("########## Quantidade de processos rodando: " + size + " ###########")
 print("######## Multiplicacao de " + (fim + 1) * size + " matrizes " + lin + " x " + col + " ########")
-t0 = now()
 for e in matrix m = m * e end
 gather = || .gather(m)
 

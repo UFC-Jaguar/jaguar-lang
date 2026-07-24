@@ -1,7 +1,9 @@
 import numpy as np
 import time
+start_time = time.perf_counter()
 #load = 65536
-load = 4000
+load = 20000
+#load = 4000
 ini = 0
 fim = load - 1
 lin = 100
@@ -23,7 +25,6 @@ m = np.array(m)
 #  for i in range(len(e)):
 #    for j in range(len(e[0])):
 #      if i<=j: e[i][j] = 1
-start_time = time.perf_counter()
 for e in matrixs:
   m = m @ e
 end_time = time.perf_counter()
