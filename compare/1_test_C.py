@@ -5,12 +5,10 @@ from threadpoolctl import threadpool_limits
 
 size = 1
 load = 65536
-load = 4096
 # Check if arguments were passed
 if len(sys.argv) > 1:
     script_name = sys.argv[0]
     size = int(sys.argv[1])
-    #second_param = sys.argv[2] if len(sys.argv) > 2 else "Not provided"
 
     with threadpool_limits(limits=size, user_api='blas'):
         start_time = time.perf_counter()
