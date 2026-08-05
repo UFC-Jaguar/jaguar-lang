@@ -37,6 +37,6 @@
      *      Detail A, variables: R="30" (replications), LOG="2_jaguar_log.txt" (file result), and N (parallel process);
      *      Detail B, Loads Numpy and Jaguar are on the sources: (1_test_A.py, 1_test_B.py, 1_test_C.py) and (2_test_A.ru, 2_test_A.ru, 2_test_A.ru). On the sources, the variable "load" set a number of matrixs to multily;
      *      Testes:
-     *      - 9.1 Jaguar: ./test_jaguar.sh;
+     *      - 9.1 Jaguar: ./test_jaguar.sh; # NOTE: I recommend exclude/comment the 32 script block from 'test_jaguar.sh'. Off course, if you have a machine with 32 or more cores, ignore the exclusion over script block from 'test_jaguar.sh'.
      *      - 9.2 Numpy: ./test_python.sh.
 ----
