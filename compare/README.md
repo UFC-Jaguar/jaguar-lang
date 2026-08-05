@@ -33,12 +33,12 @@
      *      chmod +x *.sh
      *      ./compilar.sh
 9. **Informations to Run by scripts** (Jaguar and Numpy):
-     *      Read script: "cat ./test_jaguar.sh" or "cat ./test_python.sh";
-     *      Detail A, variables: R="30" (replications), LOG="2_jaguar_log.txt" (file result), and N (parallel process);
-     *      Detail B, Loads Numpy and Jaguar are on the sources: (1_test_A.py, 1_test_B.py, 1_test_C.py) and (2_test_A.ru, 2_test_A.ru, 2_test_A.ru). On the sources, the variable "load" set a number of matrixs to multily;
-10. **Tests warning**
-     *      **Before run Jaguar**: I recommend exclude/comment the 32 script block from 'test_jaguar.sh'. Off course, if you have a machine with 32 or more cores, ignore the exclusion over script block from 'test_jaguar.sh'.
-11. **The script runners**:
-     *      - 11.1 Jaguar: ./test_jaguar.sh;
-     *      - 11.2 Numpy: ./test_python.sh.
+     - 9.1 Read script: "cat ./test_jaguar.sh" or "cat ./test_python.sh";
+     - 9.2 Detail A, variables: R="30" (replications), LOG="2_jaguar_log.txt" (file result), and N (parallel process);
+     - 9.3 Detail B, Loads Numpy and Jaguar are on the sources: (1_test_A.py, 1_test_B.py, 1_test_C.py) and (2_test_A.ru, 2_test_A.ru, 2_test_A.ru). On the sources, the variable "load" set a number of matrixs to multily;
+10. **Tests warning**, before run Jaguar:
+     - 10.1 I recommend exclude/comment the 32 script block from 'test_jaguar.sh'. Off course, if you have a machine with 32 or more cores, ignore the exclusion over script block from 'test_jaguar.sh'.
+12. **The script runners** to Jaguar and Numpy:
+     *      ./test_jaguar.sh;
+     *      ./test_python.sh.
 ----
