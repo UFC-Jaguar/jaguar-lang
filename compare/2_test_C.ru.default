@@ -1,7 +1,5 @@
 t0 = now()
-//load = 65536
-//load = 20000
-load = 100
+load = 65536
 ini = 0
 fim = (load)/size-1
 lin = 100
